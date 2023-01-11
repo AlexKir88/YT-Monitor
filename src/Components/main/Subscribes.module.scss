@@ -1,0 +1,46 @@
+.channels{
+    max-width: 90vw;
+    border: 1px solid grey;
+    margin: 1vw 3vw;
+    height: 9vh;
+    overflow: hidden;
+    border-radius: 0.5vw;
+    color: rgb(216, 28, 11);
+    background-color: rgb(232, 226, 218);
+    border: none;
+    font-family:  serif;
+    transition: background-color 1s;
+    &:hover {
+        background-color: rgb(230, 200, 200);
+        overflow: visible;
+        height: auto;
+    }
+  
+}
+.channel {
+    float: left;
+    clear: right;
+    text-align: center;
+ }
+ .input {
+    display: inline-block;
+    float: left;
+ }
+.descript {
+    color: rgb(121, 110, 110);
+    padding: 0.5vw;
+    clear: left;
+}
+.search{
+    margin: 1vw;
+    border-radius: 0.5vw;
+    height: 3vh;
+    clear: right;
+    position: relative;
+    right: 7vw;
+}
+.trash {
+    position: absolute;
+    left: 90vw;
+    margin: 0.5vw;
+}
