@@ -3,7 +3,7 @@ import Header from './Components/header/header';
 import Main from './Components/main/main';
 import { createStore, combineReducers } from 'redux';
 import { Provider } from 'react-redux';
-
+import {createStorage} from './Components/serviceFunction'
 
 const initState = {
   currentMenu: 'Videos',
@@ -32,7 +32,7 @@ const reduser = combineReducers({
 });
 
 const store = createStore(reduser, initState);
-
+createStorage();
 
 function App() {
   return (

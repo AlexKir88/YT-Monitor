@@ -47,7 +47,7 @@ export const getChannels = (theme) => {
     return arrayChannels;
 }
 
-export const deletChannel = (id) => {
+export const deleteChannel = (id) => {
    localStorage.removeItem(id) ;
 }
 
@@ -83,11 +83,66 @@ export const findGetChannel = async (nameChannel) => {
         id: channelDada.id,
         title: channelDada.snippet.title,
         description: channelDada.snippet.description ,
-        checked: true
+        checked: true,
+        mayDelete: true
     }));
 }
 
-
+export const createStorage = () => {
+    const mainDB = indexedDB.open('main',1);
+    let firstTime = false;
+    mainDB.onupgradeneeded = () => {
+        firstTime = true;
+        const resultDB = mainDB.result;
+        console.log('create DB');
+        const store = resultDB.createObjectStore('store');
+        console.log(`create ${store.name}`);
+        resultDB.onversionchange = () => {
+            
+        }
+    }
+    mainDB.onsuccess = () => {
+        console.log('open DB');
+        if(firstTime) {
+            const transaction = mainDB.result.transaction('store','readwrite');
+            const themes = transaction.objectStore('store');
+            themes.add(defaultChannels,'Default')
+            console.log('create object default');
+        }
+    }
+}
+export const createTheme = (nameTheme) => {
+    const mainDB = indexedDB.open('main',1);
+    mainDB.onsuccess = () => {
+        const db = mainDB.result;
+        const transaction = db.transaction('store',"readwrite");
+        const themes = transaction.objectStore('store');
+        const request = themes.add([], nameTheme);
+        request.onsuccess = () => {
+            console.log(`create object ${nameTheme}`);
+        }
+        request.onerror = (err) => {
+            console.log(err);
+        }
+    }
+    mainDB.onerror = (err) => {
+        console.log(err);
+    }
+}
+export const getThemes = () => {
+    const mainDB = indexedDB.open('main',1);
+        mainDB.onsuccess = () => {
+            const db = mainDB.result;
+            const transaction = db.transaction("store","readonly");
+            const themes = transaction.objectStore("store");
+            const request = themes.getAllKeys();
+            request.onsuccess = () => {
+                console.log(request.result + 'request.onsuccess 3')
+            }
+            console.log(window.result + 'mainDB.onsuccess 2');
+        }
+    console.log(window.result + 'mainDB 1');
+}
 // const urlVideos = new URL(' https://youtube.googleapis.com/youtube/v3/search');
             // urlVideos.searchParams.set('part', 'snippet');
             // urlVideos.searchParams.set('channelId',json.items[0].id.channelId);

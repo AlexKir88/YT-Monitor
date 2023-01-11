@@ -1,8 +1,10 @@
+import { useEffect } from 'react';
 import styles from './Profile.module.scss';
 import { connect } from 'react-redux';
+import { getThemes} from '../serviceFunction.jsx';
 
-const Profile = ({dispatch, addIndexedDB}) => {
-
+const Profile = ({dispatch, addTheme}) => {
+    let themes = getThemes();
     const pressEnter = (e) => {
         if (!(e.code === 'Enter' || e.code === 'NumpadEnter')) {
             return
@@ -11,7 +13,7 @@ const Profile = ({dispatch, addIndexedDB}) => {
             console.log('error')
             return
         };
-        addIndexedDB(e.target.value);
+        addTheme(e.target.value);
       
         e.target.value = '';
     }
@@ -28,8 +30,11 @@ const Profile = ({dispatch, addIndexedDB}) => {
             <input className={styles.input} onKeyDown={pressEnter} placeholder='input name theme...'/>
             <div className={styles.press}>Press 'Enter' for add theme</div>
             <div onClick={passAction}>
-                <input readOnly defaultValue='Default' className={styles.button} />
-                <input readOnly defaultValue='Default2' className={styles.button} />
+                {themes.map((item) => {
+                    return <input readOnly defaultValue={item} className={styles.button} />
+                })}
+                {/* <input readOnly defaultValue='Default' className={styles.button} />
+                <input readOnly defaultValue='Default2' className={styles.button} /> */}
             </div>
         </div>
     )

@@ -19,17 +19,18 @@ const Subscribes = ({channels, addChannel, delChannel}) => {
     }
       
     const onClickCheck = (e) => console.log(e.target.checked);
-
+  
     return (
         <div> 
             <DatePablish />
             <input type='text' placeholder="Search channel..." className={styles.search} onKeyDown={pressEnter} />
             <div>Press Enter</div>
             {channels.map((item) => {
+                let opacity = Number(!!item.mayDelete);
                 return (
                     <div className={styles.channels} key={item.id}>
                             <input type='checkbox' className={styles.input} defaultChecked={item.checked} onChange={onClickCheck}/> 
-                            <BsTrash size={23} className={styles.trash} onClick={() => delChannel(item.id)} style={{opacity: Number(item.mayDelete)}}/>
+                            <BsTrash size={23} className={styles.trash} onClick={() => delChannel(item.id)} style={{opacity}}/>
                             <div className={styles.channel}>{item.title} </div>  
                             <div className={styles.descript}>{item.description} </div>              
                     </div> 
