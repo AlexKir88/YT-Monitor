@@ -19,16 +19,25 @@ const currentTheme = ( state = 'Default', action) =>{
   }
 };
 
+const filterPeriod = ( state = 1, action) =>{
+  switch(action.type){
+    case 'PERIOD': console.log(action.filterPeriod); return action.filterPeriod ;
+    default:  return state;
+  }
+};
+
+
 const initState = {
   currentMenu: 'Videos',
   currentTheme: 'Default',
-  //add state period
+  filterPeriod: 1
 };
 
 
 const reduser = combineReducers({
   currentMenu, 
-  currentTheme
+  currentTheme,
+  filterPeriod
 });
 
 const store = createStore(reduser, initState);

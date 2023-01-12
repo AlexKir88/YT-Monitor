@@ -31,7 +31,7 @@ const defaultChannels= [
 
 ]
 
-export const getChannels = (theme, setChannels) => {
+export const getChannels = async (theme, setChannels, setVideos, filterPeriod) => {
     const mainDB = indexedDB.open('main', 1);
     mainDB.onsuccess = () => {
         const transaction = mainDB.result.transaction('store','readonly');
@@ -40,6 +40,7 @@ export const getChannels = (theme, setChannels) => {
         request.onsuccess = () => {
             const channels = request.result;
             setChannels(channels);
+            getVideos(channels, setVideos, filterPeriod);
         }
     }
 }
@@ -63,7 +64,6 @@ export const deleteChannel = (id, nameTheme) => {
 
 
 export const findGetChannel = async (nameChannel, nameTheme) => {
-            
     const url = new URL('https://youtube.googleapis.com/youtube/v3/search');
     url.searchParams.set('q', nameChannel);
     url.searchParams.set('type', 'channel');
@@ -123,7 +123,6 @@ export const createStorage = () => {
         }
     }
     mainDB.onsuccess = () => {
-        console.log('open DB');
         if(firstTime) {
             const transaction = mainDB.result.transaction('store','readwrite');
             const themes = transaction.objectStore('store');
@@ -173,20 +172,42 @@ export const deleteTheme = (nameTheme) => {
         themes.delete(nameTheme);
     }
 }
-// const urlVideos = new URL(' https://youtube.googleapis.com/youtube/v3/search');
-            // urlVideos.searchParams.set('part', 'snippet');
-            // urlVideos.searchParams.set('channelId',json.items[0].id.channelId);
-            // urlVideos.searchParams.set('eventType','none');
-            // urlVideos.searchParams.set('maxResults',100);
-            // urlVideos.searchParams.set('type','video');
-            // urlVideos.searchParams.set('key', API_KEY);
-            // urlVideos.searchParams.set('publishedAfter', "2022-11-18T09:33:46Z");
-            // urlVideos.searchParams.set('pageToken', 'pageToken');
-            // let responseVideos = await fetch(urlVideos);
-            // let jsonVideos = await responseVideos.json();
-            // // console.log(urlVideos.toString());
-            // // console.log(jsonVideos.items[+jsonVideos.items.length - 1].snippet.publishedAt);
-            // jsonVideos.items.forEach(element => {
-            //     console.log(element.snippet.publishedAt);
-            // });           
+
+export const getVideos = async (channels, setVideos, filterPeriod) => {
+    const currentDate = new Date();
+    const publishedAfter = new Date(currentDate.setDate(currentDate.getDate() - filterPeriod)).toISOString();
+    let videos = ['test', channels];
+    for(let item of channels) {
+         const urlVideos = new URL(' https://youtube.googleapis.com/youtube/v3/search');
+        urlVideos.searchParams.set('part', 'snippet');
+        urlVideos.searchParams.set('channelId',item.id);
+        urlVideos.searchParams.set('eventType','none');
+        urlVideos.searchParams.set('maxResults',20);
+        urlVideos.searchParams.set('type','video');
+        urlVideos.searchParams.set('key', API_KEY);
+        // urlVideos.searchParams.set('publishedAfter', "2022-11-20T09:33:46Z");
+        urlVideos.searchParams.set('publishedAfter', publishedAfter);
+        // urlVideos.searchParams.append('pageToken', 'pageToken');
+        let responseVideos = await fetch(urlVideos);
+        if (responseVideos.status !== 200) continue;
+        let jsonVideos = await responseVideos.json();
+        console.log(urlVideos.toString());
+        [...jsonVideos.items].forEach(element => {
+            videos.push({
+                videoId: element.id.videoId,
+                thumbnails: element.snippet.thumbnails.default.url,
+                publishedAt: element.snippet.publishedAt,
+                channelTitle: element.snippet.channelTitle,
+                title: element.snippet.title
+            })
+            console.log(element.snippet.publishedAt,
+                element.snippet.thumbnails.default.url,
+                element.id.videoId,
+                element.snippet.channelTitle,
+                element.snippet.title
+            );
+        });           
+    }
+    setVideos(videos) ;
+}
             

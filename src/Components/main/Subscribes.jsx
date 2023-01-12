@@ -22,7 +22,6 @@ const Subscribes = ({channels, addChannel, delChannel, currentTheme}) => {
   
     return (
         <div> 
-            <DatePablish />
             <div className={styles.searchDiv}>
                 <input type='text' placeholder="Search channel..." className={styles.search} onKeyDown={pressEnter} />
                 <div>Press Enter</div>

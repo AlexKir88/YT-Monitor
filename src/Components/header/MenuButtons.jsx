@@ -5,10 +5,12 @@ import { connect } from 'react-redux';
 const MenuButtons = ({dispatch}) => {
     return(
         <form onClick={(e) => {
-            dispatch({
-                type: 'MENU',
-                menu: e.target.name,
-            });
+            if(e.target.name) {
+                dispatch({
+                    type: 'MENU',
+                    menu: e.target.name,
+                });
+            }
             e.preventDefault();
         }}>
             <button className={styles.buttonMenu} type='button' name='Videos'>Videos</button>
