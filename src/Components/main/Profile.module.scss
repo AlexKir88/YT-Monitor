@@ -3,11 +3,12 @@
     border-radius: 0.5vw;
     min-height: 1vw;
     left: 40vw;
+    height: 1.5vw;
 }
 .button {
-    display: block;
+    display: inline-block;
     border-radius: 0.5vw;
-    margin: 2vw 40vw;
+    margin: 0.3vw 40vw;
     color: rgb(66, 11, 216);
     background-color: rgb(232, 226, 218);
     border: none;
@@ -21,4 +22,12 @@
 }
 .press {
     display: block;
+}
+.trash {
+    position: relative;
+    left: 8vw;
+    top: -2.1vw;
+    &:hover {
+        color: red;
+    }
 }

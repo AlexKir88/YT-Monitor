@@ -3,7 +3,7 @@ export const API_KEY = 'AIzaSyD16sUtw8kVdxoqx2oHmF6MXPC_prak5Ok';
 const defaultChannels= [
     {
         id:"UCdpPBwKPriPIP2eyP9a1C6g",
-        title: "RED Group (default value, not posible delete!)",
+        title: "RED Group",
         description: `htmllessons.ru - Интерактивные курсы #1 по созданию сайтов,  наша главная цель — подготовить профессионалов.
             Обучение идет таким образом, чтобы максимально дать вам первый толчок в IT-индустрии. Далее после изучения наших курсов, вы будете готовы работать по данной профессии, будь то IT-компания или фриланс. Сделайте шаг к успешной карьере!
 
@@ -11,11 +11,10 @@ const defaultChannels= [
             https://redlinks.space/
             Подписывайся и следи за нами!`,
         checked: true,
-        mayDelete: false
     },
     {
         id:"UCDzGdB9TTgFm8jRXn1tBdoA",
-        title: 'Ulbi TV (default value, not posible delete!)',
+        title: 'Ulbi TV',
         description: `Привет друзья!) Меня зовут Ульби Тимур. Я fullstack разработчик)
             На моем канале будут размещаться видео уроки посвященные программированию, здесь вы найдете много полезного по разным темам, javascript, backend, frontend, базы данных, алгоритмы и многое другое!)
 
@@ -28,32 +27,42 @@ const defaultChannels= [
             Qiwi кошелек - http://qiwi.com/n/BODYE821​
             Яндекс деньги - https://yoomoney.ru/to/4100116193037469  `,
         checked: true,
-        mayDelete: false
     },
 
 ]
 
-export const getChannels = (theme) => {
-    //remake on indexedDB
-    if (localStorage.length < 1) {
-        return defaultChannels;
+export const getChannels = (theme, setChannels) => {
+    const mainDB = indexedDB.open('main', 1);
+    mainDB.onsuccess = () => {
+        const transaction = mainDB.result.transaction('store','readonly');
+        const themes = transaction.objectStore('store');
+        const request = themes.get(theme);
+        request.onsuccess = () => {
+            const channels = request.result;
+            setChannels(channels);
+        }
     }
-    let arrayChannels = [];
-    for (let i = 0; i<localStorage.length; i++ ){
-        let key = localStorage.key(i);
-        let obj = JSON.parse(localStorage.getItem(key));
-        arrayChannels.push(obj);
-    }     
-    return arrayChannels;
 }
 
-export const deleteChannel = (id) => {
-   localStorage.removeItem(id) ;
+export const deleteChannel = (id, nameTheme) => {
+   const mainDB = indexedDB.open('main',1);
+    mainDB.onsuccess = () => {
+        const transaction = mainDB.result.transaction('store','readwrite');
+        const channels = transaction.objectStore('store');
+        const request = channels.get(nameTheme);
+        request.onsuccess = () => {
+           const oldValues =  request.result;
+           const newValue = oldValues.filter(item => {
+            return item.id !== id;
+           })
+           channels.put(newValue, nameTheme )
+        }
+    }
 }
 
 
 
-export const findGetChannel = async (nameChannel) => {
+export const findGetChannel = async (nameChannel, nameTheme) => {
             
     const url = new URL('https://youtube.googleapis.com/youtube/v3/search');
     url.searchParams.set('q', nameChannel);
@@ -79,14 +88,26 @@ export const findGetChannel = async (nameChannel) => {
     let responseChannel = await fetch(urlChannel);
     let jsonChannel = await responseChannel.json();
     const channelDada = jsonChannel.items[0];
-    localStorage.setItem(channelDada.id, JSON.stringify({
+
+     const newObject = {
         id: channelDada.id,
         title: channelDada.snippet.title,
         description: channelDada.snippet.description ,
         checked: true,
-        mayDelete: true
-    }));
+    };
+
+    const mainDB = indexedDB.open('main',1);
+    mainDB.onsuccess = () => {
+        const transaction = mainDB.result.transaction('store','readwrite');
+        const channels = transaction.objectStore('store');
+        const request = channels.get(nameTheme);
+        request.onsuccess = () => {
+           const oldValues =  request.result;
+           channels.put([...oldValues, newObject], nameTheme )
+        }
+    }
 }
+
 
 export const createStorage = () => {
     const mainDB = indexedDB.open('main',1);
@@ -107,7 +128,7 @@ export const createStorage = () => {
             const transaction = mainDB.result.transaction('store','readwrite');
             const themes = transaction.objectStore('store');
             themes.add(defaultChannels,'Default')
-            console.log('create object default');
+            console.log('create object Default');
         }
     }
 }
@@ -129,19 +150,28 @@ export const createTheme = (nameTheme) => {
         console.log(err);
     }
 }
-export const getThemes = () => {
+
+export const getThemes = (setThemes) => {
     const mainDB = indexedDB.open('main',1);
-        mainDB.onsuccess = () => {
+        mainDB.onsuccess = (event) => {
             const db = mainDB.result;
             const transaction = db.transaction("store","readonly");
             const themes = transaction.objectStore("store");
             const request = themes.getAllKeys();
             request.onsuccess = () => {
-                console.log(request.result + 'request.onsuccess 3')
+                let response = request.result;
+                setThemes(response);
             }
-            console.log(window.result + 'mainDB.onsuccess 2');
         }
-    console.log(window.result + 'mainDB 1');
+}
+export const deleteTheme = (nameTheme) => {
+    const mainDB = indexedDB.open('main',1);
+    mainDB.onsuccess = (event) => {
+        const db = mainDB.result;
+        const transaction = db.transaction("store","readwrite");
+        const themes = transaction.objectStore("store");
+        themes.delete(nameTheme);
+    }
 }
 // const urlVideos = new URL(' https://youtube.googleapis.com/youtube/v3/search');
             // urlVideos.searchParams.set('part', 'snippet');

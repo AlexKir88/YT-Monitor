@@ -31,10 +31,13 @@
     padding: 0.5vw;
     clear: left;
 }
+.searchDiv{
+    width: 98vw;
+}
 .search{
     margin: 1vw;
     border-radius: 0.5vw;
-    height: 3vh;
+    height: 1.5vw;
     clear: right;
     position: relative;
     right: 7vw;
@@ -43,4 +46,8 @@
     position: absolute;
     left: 90vw;
     margin: 0.5vw;
+}
+.theme {
+    font-size: 2vw;
+    color:rgb(66, 11, 216);
 }

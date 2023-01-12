@@ -8,18 +8,11 @@ const Header = () => {
         console.log('DB delete');
         e.preventDefault();
     }
-    const getThemesHeder = () => {
-        getThemes(function(e) {
-            console.log(e +'4');
-        })
-    }
-
     return (
         <div className={styles.head}>
             <span className={styles.header}>YouTube video monitor</span>
             <MenuButtons />
-            <button onClick={onClick}>clear DB</button>
-            <button onClick={getThemes}>get themes</button>
+            <button className={styles.clearDB} onClick={onClick}>clear DB</button>
         </div>
     )
 }

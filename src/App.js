@@ -5,13 +5,6 @@ import { createStore, combineReducers } from 'redux';
 import { Provider } from 'react-redux';
 import {createStorage} from './Components/serviceFunction'
 
-const initState = {
-  currentMenu: 'Videos',
-  currentTheme: 'Default',
-  //add state period
-};
-
-
 const currentMenu = ( state = 'Videos', action) =>{
   switch(action.type){
     case 'MENU':  return  action.menu ;
@@ -21,10 +14,17 @@ const currentMenu = ( state = 'Videos', action) =>{
 
 const currentTheme = ( state = 'Default', action) =>{
   switch(action.type){
-    case 'THEME': console.log(action.theme); return action.theme ;
+    case 'THEME':  return action.theme ;
     default:  return state;
   }
 };
+
+const initState = {
+  currentMenu: 'Videos',
+  currentTheme: 'Default',
+  //add state period
+};
+
 
 const reduser = combineReducers({
   currentMenu, 

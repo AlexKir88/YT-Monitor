@@ -2,9 +2,10 @@ import { useEffect } from 'react';
 import styles from './Profile.module.scss';
 import { connect } from 'react-redux';
 import { getThemes} from '../serviceFunction.jsx';
+import { BsTrash } from 'react-icons/bs';
 
-const Profile = ({dispatch, addTheme}) => {
-    let themes = getThemes();
+const Profile = ({dispatch, addTheme, themes, delTheme}) => {
+    // let themes = getThemes();
     const pressEnter = (e) => {
         if (!(e.code === 'Enter' || e.code === 'NumpadEnter')) {
             return
@@ -31,10 +32,11 @@ const Profile = ({dispatch, addTheme}) => {
             <div className={styles.press}>Press 'Enter' for add theme</div>
             <div onClick={passAction}>
                 {themes.map((item) => {
-                    return <input readOnly defaultValue={item} className={styles.button} />
+                    const visibility = item === 'Default'? 'hidden':'visible';
+                    return (<div key={item}> <input readOnly defaultValue={item}  className={styles.button} />
+                    <BsTrash size={20} className={styles.trash} onClick={() => delTheme(item)} style={{visibility}}/>
+                    </div>)
                 })}
-                {/* <input readOnly defaultValue='Default' className={styles.button} />
-                <input readOnly defaultValue='Default2' className={styles.button} /> */}
             </div>
         </div>
     )
