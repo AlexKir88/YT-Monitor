@@ -1,6 +1,6 @@
 import styles from './header.module.scss';
 import MenuButtons from './MenuButtons';
-import {getVideos} from '../serviceFunction'
+import {getVideos} from '../serviceFunctions'
 
 const Header = () => {
     const onClick = (e) => {

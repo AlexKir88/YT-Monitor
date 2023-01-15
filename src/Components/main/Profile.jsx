@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import styles from './Profile.module.scss';
 import { connect } from 'react-redux';
-import { getThemes} from '../serviceFunction.jsx';
+import { getThemes} from '../serviceFunctions';
 import { BsTrash } from 'react-icons/bs';
 
 const Profile = ({dispatch, addTheme, themes, delTheme}) => {
@@ -20,21 +20,27 @@ const Profile = ({dispatch, addTheme, themes, delTheme}) => {
     }
 
     const passAction = (e) => {
+        if(e.target.toString() === '[object SVGSVGElement]') return;
         dispatch({
             type: 'THEME',
             theme: e.target.value
         })
         e.preventDefault();
+    };
+    const deleteTheme = (e, item) => {
+        delTheme(item);
+        e.preventDefault();
     }
+
     return (
         <div>
             <input className={styles.input} onKeyDown={pressEnter} placeholder='input name theme...'/>
             <div className={styles.press}>Press 'Enter' for add theme</div>
             <div onClick={passAction}>
                 {themes.map((item) => {
-                    const visibility = item === 'Default'? 'hidden':'visible';
+                    let visibility = item === 'Default' ? 'hidden': 'visible';
                     return (<div key={item}> <input readOnly defaultValue={item}  className={styles.button} />
-                    <BsTrash size={20} className={styles.trash} onClick={() => delTheme(item)} style={{visibility}}/>
+                    <BsTrash size={20} className={styles.trash} style={{visibility}} onClick={(e) => deleteTheme(e, item)} />
                     </div>)
                 })}
             </div>

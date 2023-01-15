@@ -2,7 +2,7 @@ import { useRef, useState, useEffect } from 'react';
 import styles from './main.module.scss'
 import Video from './Video';
 import Profile from './Profile';
-import {getChannels, findGetChannel, deleteChannel, createTheme, getThemes, deleteTheme, getVideos} from '../serviceFunction.jsx';
+import {getChannels, findGetChannel, deleteChannel, createTheme, getThemes, deleteTheme, getVideos, currentKeyAPI} from '../serviceFunctions';
 import Subscribes from './Subscribes';
 import { connect } from 'react-redux';
 
@@ -17,11 +17,11 @@ const Main = ({currentMenu, currentTheme, filterPeriod,  dispatch}) => {
     
     useEffect(() => {
        getChannels(currentTheme, setChannels, setVideos, filterPeriod);
-    },[currentTheme])
+    },[currentTheme, filterPeriod])
     
 
     const addChannel = async (nameChannel) => {
-        await findGetChannel(nameChannel, currentTheme);
+        await findGetChannel(nameChannel, currentTheme, currentKeyAPI);
         getChannels(currentTheme, setChannels, setVideos, filterPeriod);
     }
     const delChannel = async (id) => {
@@ -30,7 +30,7 @@ const Main = ({currentMenu, currentTheme, filterPeriod,  dispatch}) => {
     }
     const addTheme = (nameTheme) => {
         createTheme(nameTheme);
-        getThemes(setThemes)
+        getThemes(setThemes);
     }
     const delTheme = (nameTheme) => {
         deleteTheme(nameTheme);

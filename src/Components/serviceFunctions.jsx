@@ -1,4 +1,28 @@
-export const API_KEY = 'AIzaSyD16sUtw8kVdxoqx2oHmF6MXPC_prak5Ok';
+export const API_KEY = [
+    'AIzaSyBhOuuC0gOEvTyNXcYAx5SEFCt0xFw-YwQ' ,
+    'AIzaSyD3P-54FcONK98IvAkc-U2K-va7KrlsvWc' 
+];
+export const setFirstKeyAPI = () => {
+    const currentKeyAPIObj = JSON.parse(sessionStorage.getItem('currentKeyAPI'));
+    if(currentKeyAPIObj) return;
+    sessionStorage.setItem('currentKeyAPI', JSON.stringify({
+        numberKeyAPi : 0,
+        keyAPI : API_KEY[0],
+    }))
+}
+
+const changeKeyApi = () => {
+    const currentKeyAPIObj = JSON.parse(sessionStorage.getItem('currentKeyAPI'));
+    if(API_KEY.length <= +currentKeyAPIObj.numberKeyAPi + 1) {
+        return false;
+    };
+    let newKeyAPI = API_KEY[+currentKeyAPIObj.numberKeyAPi + 1]
+    sessionStorage.setItem('currentKeyAPI', JSON.stringify({
+        numberKeyAPi: +currentKeyAPIObj.numberKeyAPi + 1,
+        keyAPI: newKeyAPI,
+    }));
+    return newKeyAPI;
+}
 
 const defaultChannels= [
     {
@@ -40,7 +64,7 @@ export const getChannels = async (theme, setChannels, setVideos, filterPeriod) =
         request.onsuccess = () => {
             const channels = request.result;
             setChannels(channels);
-            getVideos(channels, setVideos, filterPeriod);
+            getVideos(channels, setVideos, filterPeriod, currentKeyAPI);
         }
     }
 }
@@ -62,17 +86,23 @@ export const deleteChannel = (id, nameTheme) => {
 }
 
 
+export const currentKeyAPI = JSON.parse(sessionStorage.getItem('currentKeyAPI')).keyAPI;
 
-export const findGetChannel = async (nameChannel, nameTheme) => {
+export const findGetChannel = async (nameChannel, nameTheme, KeyAPI = currentKeyAPI) => {
     const url = new URL('https://youtube.googleapis.com/youtube/v3/search');
     url.searchParams.set('q', nameChannel);
     url.searchParams.set('type', 'channel');
-    url.searchParams.set('key', API_KEY);
+    url.searchParams.set('key', KeyAPI);
     url.searchParams.set('maxResults', 1);
     let response = await fetch(url);
-    if(response.status !== 200) {
-        alert('error request');
-        return
+    console.log(response);
+    if(response.status === 403) {
+        const newKeyAPI = changeKeyApi();
+        if(!newKeyAPI) {
+            alert('request limit exceeded');
+            return
+        };
+        findGetChannel(nameChannel, nameTheme, newKeyAPI); 
     }
 
     let json = await response.json();
@@ -80,12 +110,22 @@ export const findGetChannel = async (nameChannel, nameTheme) => {
     if (!channel){
         return;
     }
-
+    localStorage.setItem('requestCount', +localStorage.getItem('requestCount') + 1);
     const urlChannel = new URL('https://youtube.googleapis.com/youtube/v3/channels');
     urlChannel.searchParams.set('part', 'snippet,contentDetails,statistics');
     urlChannel.searchParams.set('id', channel.id.channelId);
-    urlChannel.searchParams.set('key', API_KEY);
+    urlChannel.searchParams.set('key', KeyAPI);
     let responseChannel = await fetch(urlChannel);
+    console.log(responseChannel);
+
+    if(responseChannel.status === 403) {
+        const newKeyAPI = changeKeyApi();
+        if(!newKeyAPI) {
+            alert('request limit exceeded');
+            return
+        };
+        findGetChannel(nameChannel, nameTheme, newKeyAPI); 
+    }
     let jsonChannel = await responseChannel.json();
     const channelDada = jsonChannel.items[0];
 
@@ -106,6 +146,7 @@ export const findGetChannel = async (nameChannel, nameTheme) => {
            channels.put([...oldValues, newObject], nameTheme )
         }
     }
+    localStorage.setItem('requestCount', +localStorage.getItem('requestCount') + 1);
 }
 
 
@@ -173,41 +214,44 @@ export const deleteTheme = (nameTheme) => {
     }
 }
 
-export const getVideos = async (channels, setVideos, filterPeriod) => {
+export const getVideos = async (channels, setVideos, filterPeriod, KeyAPI = currentKeyAPI ) => {
     const currentDate = new Date();
     const publishedAfter = new Date(currentDate.setDate(currentDate.getDate() - filterPeriod)).toISOString();
-    let videos = ['test', channels];
+    let videos = [];
     for(let item of channels) {
-         const urlVideos = new URL(' https://youtube.googleapis.com/youtube/v3/search');
+        const urlVideos = new URL(' https://youtube.googleapis.com/youtube/v3/search');
         urlVideos.searchParams.set('part', 'snippet');
         urlVideos.searchParams.set('channelId',item.id);
         urlVideos.searchParams.set('eventType','none');
         urlVideos.searchParams.set('maxResults',20);
         urlVideos.searchParams.set('type','video');
-        urlVideos.searchParams.set('key', API_KEY);
-        // urlVideos.searchParams.set('publishedAfter', "2022-11-20T09:33:46Z");
+        urlVideos.searchParams.set('key', KeyAPI);
         urlVideos.searchParams.set('publishedAfter', publishedAfter);
         // urlVideos.searchParams.append('pageToken', 'pageToken');
         let responseVideos = await fetch(urlVideos);
-        if (responseVideos.status !== 200) continue;
-        let jsonVideos = await responseVideos.json();
+        console.log(responseVideos);
         console.log(urlVideos.toString());
-        [...jsonVideos.items].forEach(element => {
+        if(responseVideos.status === 403) {
+            const newKeyAPI = changeKeyApi();
+            if(!newKeyAPI) {
+                alert('request limit exceeded');
+                return
+            };
+            getVideos(channels, setVideos, filterPeriod, newKeyAPI); 
+        }
+        localStorage.setItem('requestCount', +localStorage.getItem('requestCount') + 1)
+        let jsonVideos = await responseVideos.json();
+        jsonVideos?.items?.forEach(element => {
             videos.push({
                 videoId: element.id.videoId,
-                thumbnails: element.snippet.thumbnails.default.url,
+                thumbnails: element.snippet.thumbnails.high.url,
                 publishedAt: element.snippet.publishedAt,
                 channelTitle: element.snippet.channelTitle,
                 title: element.snippet.title
             })
-            console.log(element.snippet.publishedAt,
-                element.snippet.thumbnails.default.url,
-                element.id.videoId,
-                element.snippet.channelTitle,
-                element.snippet.title
-            );
         });           
     }
-    setVideos(videos) ;
+    const sortVideos = videos?.sort((a, b) =>  new Date(b.publishedAt) - +new Date(a.publishedAt));
+    setVideos(sortVideos) ;
 }
             
