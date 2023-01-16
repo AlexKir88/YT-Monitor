@@ -1,5 +1,6 @@
 * {
     box-sizing: border-box;
+    text-decoration: none;
 }
 .video{
     border: 2px solid rgb(78, 24, 24);
@@ -14,7 +15,7 @@
     text-align: left;
     text-decoration: none;
     font-family: arial;
-    font-size: 3vh;
+    font-size: 0.9vw;
     display: inline-block;
 }
 
@@ -32,10 +33,6 @@
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: flex-start;
-    // &:hover {
-    //     position: absolute;
-    //     width: 20vw;
-    // }
 }
 .nameVideo {
     padding: 0 1vw;

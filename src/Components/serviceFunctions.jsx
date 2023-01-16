@@ -1,28 +1,8 @@
 export const API_KEY = [
-    'AIzaSyBhOuuC0gOEvTyNXcYAx5SEFCt0xFw-YwQ' ,
-    'AIzaSyD3P-54FcONK98IvAkc-U2K-va7KrlsvWc' 
+    'AIzaSyBhOuuC0gOEvTyNXcYAx5SEFCt0xFw-YwQ',
+    'AIzaSyD3P-54FcONK98IvAkc-U2K-va7KrlsvWc',
 ];
-export const setFirstKeyAPI = () => {
-    const currentKeyAPIObj = JSON.parse(sessionStorage.getItem('currentKeyAPI'));
-    if(currentKeyAPIObj) return;
-    sessionStorage.setItem('currentKeyAPI', JSON.stringify({
-        numberKeyAPi : 0,
-        keyAPI : API_KEY[0],
-    }))
-}
 
-const changeKeyApi = () => {
-    const currentKeyAPIObj = JSON.parse(sessionStorage.getItem('currentKeyAPI'));
-    if(API_KEY.length <= +currentKeyAPIObj.numberKeyAPi + 1) {
-        return false;
-    };
-    let newKeyAPI = API_KEY[+currentKeyAPIObj.numberKeyAPi + 1]
-    sessionStorage.setItem('currentKeyAPI', JSON.stringify({
-        numberKeyAPi: +currentKeyAPIObj.numberKeyAPi + 1,
-        keyAPI: newKeyAPI,
-    }));
-    return newKeyAPI;
-}
 
 const defaultChannels= [
     {
@@ -34,7 +14,6 @@ const defaultChannels= [
             На данном канала, Вы найдете обучающие уроки по разработке, дизайну и маркетингу. А так же большие плейлисты с разработкой реальных проектов с 0.
             https://redlinks.space/
             Подписывайся и следи за нами!`,
-        checked: true,
     },
     {
         id:"UCDzGdB9TTgFm8jRXn1tBdoA",
@@ -50,7 +29,6 @@ const defaultChannels= [
 
             Qiwi кошелек - http://qiwi.com/n/BODYE821​
             Яндекс деньги - https://yoomoney.ru/to/4100116193037469  `,
-        checked: true,
     },
 
 ]
@@ -64,7 +42,7 @@ export const getChannels = async (theme, setChannels, setVideos, filterPeriod) =
         request.onsuccess = () => {
             const channels = request.result;
             setChannels(channels);
-            getVideos(channels, setVideos, filterPeriod, currentKeyAPI);
+            getVideos(channels, setVideos, filterPeriod);
         }
     }
 }
@@ -86,45 +64,34 @@ export const deleteChannel = (id, nameTheme) => {
 }
 
 
-export const currentKeyAPI = JSON.parse(sessionStorage.getItem('currentKeyAPI')).keyAPI;
 
-export const findGetChannel = async (nameChannel, nameTheme, KeyAPI = currentKeyAPI) => {
+
+export const findGetChannel = async (nameChannel, nameTheme) => {
     const url = new URL('https://youtube.googleapis.com/youtube/v3/search');
     url.searchParams.set('q', nameChannel);
     url.searchParams.set('type', 'channel');
-    url.searchParams.set('key', KeyAPI);
+    url.searchParams.set('key', API_KEY[1] );
     url.searchParams.set('maxResults', 1);
     let response = await fetch(url);
     console.log(response);
     if(response.status === 403) {
-        const newKeyAPI = changeKeyApi();
-        if(!newKeyAPI) {
-            alert('request limit exceeded');
-            return
-        };
-        findGetChannel(nameChannel, nameTheme, newKeyAPI); 
-    }
-
-    let json = await response.json();
-    let channel = json.items[0];
-    if (!channel){
+        console.log('oops');
         return;
     }
+    let json = await response.json();
+    let channel = json.items[0];
+    if (!channel) return;
     localStorage.setItem('requestCount', +localStorage.getItem('requestCount') + 1);
     const urlChannel = new URL('https://youtube.googleapis.com/youtube/v3/channels');
     urlChannel.searchParams.set('part', 'snippet,contentDetails,statistics');
     urlChannel.searchParams.set('id', channel.id.channelId);
-    urlChannel.searchParams.set('key', KeyAPI);
+    urlChannel.searchParams.set('key',API_KEY[1]);
     let responseChannel = await fetch(urlChannel);
     console.log(responseChannel);
 
     if(responseChannel.status === 403) {
-        const newKeyAPI = changeKeyApi();
-        if(!newKeyAPI) {
-            alert('request limit exceeded');
-            return
-        };
-        findGetChannel(nameChannel, nameTheme, newKeyAPI); 
+        console.log('oops') 
+        return; 
     }
     let jsonChannel = await responseChannel.json();
     const channelDada = jsonChannel.items[0];
@@ -133,7 +100,6 @@ export const findGetChannel = async (nameChannel, nameTheme, KeyAPI = currentKey
         id: channelDada.id,
         title: channelDada.snippet.title,
         description: channelDada.snippet.description ,
-        checked: true,
     };
 
     const mainDB = indexedDB.open('main',1);
@@ -214,7 +180,7 @@ export const deleteTheme = (nameTheme) => {
     }
 }
 
-export const getVideos = async (channels, setVideos, filterPeriod, KeyAPI = currentKeyAPI ) => {
+export const getVideos = async (channels, setVideos, filterPeriod, KeyAPI ) => {
     const currentDate = new Date();
     const publishedAfter = new Date(currentDate.setDate(currentDate.getDate() - filterPeriod)).toISOString();
     let videos = [];
@@ -223,21 +189,15 @@ export const getVideos = async (channels, setVideos, filterPeriod, KeyAPI = curr
         urlVideos.searchParams.set('part', 'snippet');
         urlVideos.searchParams.set('channelId',item.id);
         urlVideos.searchParams.set('eventType','none');
-        urlVideos.searchParams.set('maxResults',20);
+        urlVideos.searchParams.set('maxResults',1);
         urlVideos.searchParams.set('type','video');
-        urlVideos.searchParams.set('key', KeyAPI);
+        urlVideos.searchParams.set('key', API_KEY[1] );
         urlVideos.searchParams.set('publishedAfter', publishedAfter);
         // urlVideos.searchParams.append('pageToken', 'pageToken');
         let responseVideos = await fetch(urlVideos);
-        console.log(responseVideos);
-        console.log(urlVideos.toString());
         if(responseVideos.status === 403) {
-            const newKeyAPI = changeKeyApi();
-            if(!newKeyAPI) {
-                alert('request limit exceeded');
-                return
-            };
-            getVideos(channels, setVideos, filterPeriod, newKeyAPI); 
+            console.log('oops')
+            return;
         }
         localStorage.setItem('requestCount', +localStorage.getItem('requestCount') + 1)
         let jsonVideos = await responseVideos.json();
@@ -249,7 +209,9 @@ export const getVideos = async (channels, setVideos, filterPeriod, KeyAPI = curr
                 channelTitle: element.snippet.channelTitle,
                 title: element.snippet.title
             })
-        });           
+        });
+        console.log(responseVideos);
+        console.log(item.title);           
     }
     const sortVideos = videos?.sort((a, b) =>  new Date(b.publishedAt) - +new Date(a.publishedAt));
     setVideos(sortVideos) ;

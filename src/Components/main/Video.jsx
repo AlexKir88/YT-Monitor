@@ -1,6 +1,7 @@
 import styles from './Video.module.scss'
 import  DatePablish from './DatePublish'
-
+import { useRef } from 'react';
+import { connect } from 'react-redux'; 
 
 const Video = ({videos}) => {
     return (
