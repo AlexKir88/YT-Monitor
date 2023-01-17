@@ -1,7 +1,6 @@
 import styles from './Video.module.scss'
 import  DatePablish from './DatePublish'
-import { useRef } from 'react';
-import { connect } from 'react-redux'; 
+import { useEffect, useState } from 'react'
 
 const Video = ({videos}) => {
     return (
@@ -9,6 +8,7 @@ const Video = ({videos}) => {
             <div className={styles.dates}>
                 <DatePablish />
             </div>
+            {/* {panding && <img src='https://icon-library.com/images/spinner-icon-gif/spinner-icon-gif-25.jpg' alt="loading..."  width="200" />} */}
             <div className={styles.videos}>
                     {videos?.map(item => {
                         return (

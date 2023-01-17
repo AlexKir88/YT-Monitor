@@ -1,10 +1,14 @@
 import styles from './header.module.scss';
 import { connect } from 'react-redux';
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 
 const MenuButtons = ({dispatch}) => {
     let currentButton = useRef(null);
+    useEffect( (el) => {
+        currentButton.style.border ='1px solid red';
+    },[])
     const setRef = (el) => {
+        // currentButton.current.style = '';
         currentButton.tagName && ( currentButton.style = '');
         currentButton = el;
         currentButton.style.border = '1px solid red';
@@ -21,9 +25,9 @@ const MenuButtons = ({dispatch}) => {
     }
     return(
         <form onClick={onClick}>
-            <button className={styles.buttonMenu}  type='button' name='Videos'>Videos</button>
+            <button className={styles.buttonMenu} ref={el => currentButton = el } type='button' name='Videos'>Videos</button>
             <button className={styles.buttonMenu}  type='button' name='Subscribes'>Subscribes</button>
-            <button className={styles.buttonMenu}  type='button' name='Profile'>Profile</button>
+            <button className={styles.buttonMenu}  type='button' name='Groups'>Groups</button>
         </form>
     )
 }

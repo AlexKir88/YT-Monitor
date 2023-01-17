@@ -1,58 +1,57 @@
-import { useRef, useState, useEffect } from 'react';
+import { useState, useEffect, useTransition } from 'react';
 import styles from './main.module.scss'
 import Video from './Video';
-import Profile from './Profile';
-import {getChannels, findGetChannel, deleteChannel, createTheme, getThemes, deleteTheme, getVideos, GetCurrentKeyAPI} from '../serviceFunctions';
+import {getChannels, findGetChannel, deleteChannel, createGroup, getGroups, deleteGroup} from '../serviceFunctions';
 import Subscribes from './Subscribes';
 import { connect } from 'react-redux';
+import Groups from './Groups';
 
-const Main = ({currentMenu, currentTheme, filterPeriod,  dispatch}) => {
-    const [themes, setThemes] = useState(['---']);
+const Main = ({currentMenu, currentGroup, filterPeriod,  dispatch}) => {
+    const [groups, setGroups] = useState(['---']);
     const [channels, setChannels] = useState(['---']);
     const [videos, setVideos] = useState();
-
     useEffect(() => {
-        getThemes(setThemes);
+        getGroups(setGroups);
     },[] );
     
     useEffect(() => {
-       getChannels(currentTheme, setChannels, setVideos, filterPeriod);
-    },[currentTheme, filterPeriod ])
+        getChannels(currentGroup, setChannels, setVideos, filterPeriod);
+    },[currentGroup, filterPeriod])
 
     const addChannel = async (nameChannel) => {
-        await findGetChannel(nameChannel, currentTheme);
-        getChannels(currentTheme, setChannels, setVideos, filterPeriod);
+        await findGetChannel(nameChannel, currentGroup);
+        getChannels(currentGroup, setChannels, setVideos, filterPeriod);
     }
     const delChannel = async (id) => {
-        deleteChannel(id, currentTheme) ;
-        getChannels(currentTheme, setChannels, setVideos, filterPeriod);
+        deleteChannel(id, currentGroup) ;
+        getChannels(currentGroup, setChannels, setVideos, filterPeriod);
     }
-    const addTheme = (nameTheme) => {
-        createTheme(nameTheme);
-        getThemes(setThemes);
+    const addGroup = (nameGroup) => {
+        createGroup(nameGroup);
+        getGroups(setGroups);
     }
-    const delTheme = (nameTheme) => {
-        deleteTheme(nameTheme);
-        getThemes(setThemes)
+    const delGroup = (nameGroup) => {
+        deleteGroup(nameGroup);
+        getGroups(setGroups)
         dispatch({
-            type: "THEME",
+            type: "GROUP",
             theme: "Default"
         });
     }
     
     return (
         <div className={styles.main}>
-            {currentMenu === 'Videos' && <Video videos={videos} />}
-            {currentMenu === 'Subscribes' && <Subscribes channels={channels}  addChannel={addChannel} delChannel={delChannel} currentTheme={currentTheme}/>}
-            {currentMenu === 'Profile' && <Profile  addTheme={addTheme} themes={themes} delTheme={delTheme}/>}
+            {currentMenu === 'Videos' && <Video videos={videos}  />}
+            {currentMenu === 'Subscribes' && <Subscribes channels={channels}  addChannel={addChannel} delChannel={delChannel} currentTheme={currentGroup}/>}
+            {currentMenu === 'Groups' && <Groups  addGroup={addGroup} groups={groups} delGroup={delGroup}/>}
         </div>
     )
 }
 
-const mapStateFromProps = ({currentMenu,currentTheme,filterPeriod}) => {
+const mapStateFromProps = ({currentMenu,currentGroup,filterPeriod}) => {
     return {
         currentMenu,
-        currentTheme,
+        currentGroup,
         filterPeriod
     }
 }

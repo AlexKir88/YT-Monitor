@@ -3,7 +3,7 @@ import Header from './Components/header/header';
 import Main from './Components/main/main';
 import { createStore, combineReducers } from 'redux';
 import { Provider } from 'react-redux';
-import {createStorage, setFirstKeyAPI} from './Components/serviceFunctions'
+import {createStorage} from './Components/serviceFunctions'
 import { useEffect } from 'react';
 
 
@@ -15,9 +15,9 @@ const currentMenu = ( state = 'Videos', action) =>{
   }
 };
 
-const currentTheme = ( state = 'Default', action) =>{
+const currentGroup = ( state = 'Default', action) =>{
   switch(action.type){
-    case 'THEME': return action.theme ;
+    case 'GROUP': return action.group ;
     default:  return state;
   }
 };
@@ -32,14 +32,14 @@ const filterPeriod = ( state = 7, action) =>{
 
 const initState = {
   currentMenu: 'Videos',
-  currentTheme: 'Default',
+  currentGroup: 'Default',
   filterPeriod: 7
 };
 
 
 const reduser = combineReducers({
   currentMenu, 
-  currentTheme,
+  currentGroup,
   filterPeriod
 });
 
@@ -49,6 +49,9 @@ createStorage();
 
 
 function App() {
+  useEffect(() => {
+    console.log('App')
+  },[])
   return (
     <Provider store={store}>
       <div className="App">
@@ -56,7 +59,6 @@ function App() {
         <Main />
     </div>
     </Provider>
-    
   );
 }
 
