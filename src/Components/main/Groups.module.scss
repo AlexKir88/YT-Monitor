@@ -1,14 +1,15 @@
 .input {
     margin: 1vw;
-    border-radius: 0.5vw;
+    border-radius: 3vw;
     min-height: 1vw;
     left: 40vw;
-    height: 1.5vw;
+    height: 1.5rem;
 }
 .button {
+    width: 30vw;
     display: inline-block;
     border-radius: 0.5vw;
-    margin: 0.3vw 40vw;
+    margin: 1.5vw auto;
     color: rgb(66, 11, 216);
     background-color: rgb(232, 226, 218);
     border: none;
@@ -20,14 +21,24 @@
         background-color: rgb(89, 87, 84);
     }
 }
+@media only screen and (max-width: 600px) {
+    .button {
+        border-radius: 5vw;
+        width: 70vw;
+    }
+}
 .press {
     display: block;
 }
 .trash {
-    position: relative;
-    left: 8vw;
-    top: -2.1vw;
+    position: static;
+    right: 3vw;
+    float: right;
     &:hover {
         color: red;
     }
+}
+.groupList {
+    margin: auto;
+    width: 98vw;
 }

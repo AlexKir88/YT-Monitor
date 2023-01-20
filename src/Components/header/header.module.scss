@@ -1,20 +1,22 @@
 .head{
     border-bottom: 2px solid rgb(78, 24, 24);
     max-height: 30vw;
-    padding: 3vw 0;
+    padding: 0vw 0;
     max-width: 95vw;
     .buttonMenu{
         min-width: 10vw;
         position: relative;
-        left: -8vw;
+        margin: 1.5vw;
     }
+
     .header{
-        float: left;
-        font-size: 2.5vw;
+        // float: left;
+        font-size: 2rem;
         position: relative;
         left: 1vw;
         color: rgb(248, 226, 226);
         text-shadow: 2px 2px #181717;
+        margin: 2rem;
     }
     .clearDB {
         color: black;
@@ -22,5 +24,12 @@
         right: 2vw;
         top: 1vw;
         font-size: 1vw;
+    }
+}
+@media only screen and (max-width: 600px) {
+    .buttonMenu {
+        width: 20vw;
+        margin: 1vw;
+        font-size: 1.1rem;
     }
 }

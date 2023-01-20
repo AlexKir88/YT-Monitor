@@ -2,7 +2,7 @@ export const API_KEY = [
     'AIzaSyBhOuuC0gOEvTyNXcYAx5SEFCt0xFw-YwQ', //43485
     'AIzaSyD3P-54FcONK98IvAkc-U2K-va7KrlsvWc', //67051
     'AIzaSyBGhjGT88pmeiwRImhEuufQDxAecgZQKZY', //43070
-    // 'AIzaSyCIp4PmyP8a6NZlKP7ijRP6wmEo19qGdGA', //45895
+    'AIzaSyCIp4PmyP8a6NZlKP7ijRP6wmEo19qGdGA', //45895
     // 'AIzaSyCuafXwM2F2ojfxbZBiLqX1dF84OYKmUio'  //6827
 ];
 
@@ -59,7 +59,6 @@ const defaultChannels= [
             Яндекс деньги - https://yoomoney.ru/to/4100116193037469  `,
         thumbnails: "https://yt3.googleusercontent.com/ytc/AMLnZu9K44a6ao-Tv-6ib3oY_-1RIen0nlNE_NwlsdL3=s800-c-k-c0xffffffff-no-rj-mo"
     },
-
 ]
 
 export const getChannels = async (group, setChannels, setVideos, filterPeriod) => {
@@ -108,12 +107,6 @@ export const findGetChannel = async (nameChannel, nameGroup) => {
     if(response.status === 403) {
         await getToggleKey(() => findGetChannel(nameChannel, nameGroup ));
         return;
-        // if (counter > (API_KEY.length + 1) * 3) {
-        //     console.log('key limit');
-        //     return;
-        // }
-        // findGetChannel(nameChannel, nameGroup );
-        // return;
     }
     let json = await response.json();
     let channel = json.items[0];
@@ -204,11 +197,8 @@ export const deleteGroup = (nameGroup) => {
 }
 
 export const getVideos = async (channels, setVideos, filterPeriod, dateStart = new Date()) => {
-    //if(channels = ?prevChannels)
-    //counter not work, may be cause async await
     // let indexKeyAPI = RandomIndexKeyAPI();
     // console.log(indexKeyAPI);
-
     const currentDate = new Date(new Date().setHours(0,0,0,0));
     const publishedAfter = new Date(currentDate.setDate(currentDate.getDate() - filterPeriod)).toISOString();
     let videos = [];
@@ -228,12 +218,6 @@ export const getVideos = async (channels, setVideos, filterPeriod, dateStart = n
         if(responseVideos.status === 403) {
             await getToggleKey(() => getVideos(channels, setVideos, filterPeriod, dateStart));
             return;
-            // if ( new Date() - dateStart > 10000) {
-            //     alert('API key quota exceeded');
-            //     return false;
-            // }
-            // await getVideos(channels, setVideos, filterPeriod, dateStart);
-            // return false;
         }
         let jsonVideos = await responseVideos.json();
         jsonVideos?.items?.forEach(element => {
@@ -243,10 +227,8 @@ export const getVideos = async (channels, setVideos, filterPeriod, dateStart = n
                 publishedAt: element.snippet.publishedAt,
                 channelTitle: element.snippet.channelTitle,
                 title: element.snippet.title,
-                // duration: element.contentDetails.duration,
             })
         });
-
         console.log(responseVideos);
         console.log(item.title);           
     }

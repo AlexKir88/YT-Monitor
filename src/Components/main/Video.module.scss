@@ -6,9 +6,21 @@
     border: 2px solid rgb(78, 24, 24);
     margin: 0 1vw;
     border-radius: 1vw;
-    width: 14vw;
+    width: 18vw;
     &:hover {
         border: 2px red solid;
+    }
+}
+@media only screen and (max-width: 600px) {
+    .video {
+        border: 2px solid rgb(78, 24, 24);
+        margin: auto 1vw;
+        border-radius: 5vw;
+        width: 90vw;
+
+        &:hover {
+            border: 2px red solid;
+        }
     }
 }
 .flexItem {
@@ -21,12 +33,13 @@
 
 .channel {
     font-weight: 700;
-    padding: 0 1vw;
+    padding: 0 1.5vw;
     color: black;
+    font-size: 1rem;
 }
 .dates {
     width: 98vw;
-    height: 5vw;
+    height: 3rem;
 }
 .videos {
     display: flex;
@@ -35,14 +48,15 @@
     justify-content: flex-start;
 }
 .nameVideo {
-    padding: 0 1vw;
+    padding: 0 1.5vw;
     max-height: 2.5em;
     overflow: hidden;
     width: 15vw;
     color: black;
+    font-size: 1rem;
 }
 .date {
-    padding: 0 1vw;
+    padding: 0 1.5vw;
     color: black;
-    font-size: 0.7rem;
+    font-size: 0.9rem;
 }

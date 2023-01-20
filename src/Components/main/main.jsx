@@ -14,6 +14,7 @@ const Main = ({currentMenu, currentGroup, filterPeriod,  dispatch}) => {
     useEffect(() => {
         getGroups(setGroups);
     },[] );
+
     useEffect(() => {
         getChannels(currentGroup, setChannels, setVideos, filterPeriod);
     },[currentGroup, filterPeriod])
@@ -31,12 +32,13 @@ const Main = ({currentMenu, currentGroup, filterPeriod,  dispatch}) => {
         getGroups(setGroups);
     }
     const delGroup = (nameGroup) => {
-        deleteGroup(nameGroup);
-        getGroups(setGroups)
         dispatch({
             type: "GROUP",
-            theme: "Default"
+            group: "Default"
         });
+        deleteGroup(nameGroup);
+        getGroups(setGroups)
+        
     }
     
     return (

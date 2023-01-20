@@ -1,8 +1,8 @@
 .channels{
-    max-width: 90vw;
+    max-width: 80vw;
     border: 1px solid grey;
-    margin: 1vw 3vw;
-    height: 3vw;
+    margin: 1vw 5vw;
+    height: 3rem;
     overflow: hidden;
     border-radius: 0.5vw;
     color: rgb(216, 28, 11);
@@ -11,16 +11,14 @@
     font-family:  serif;
     transition: background-color 1s;
     &:hover {
-        background-color: rgb(230, 200, 200);
-        overflow: visible;
-        height: auto;
+        background-color: rgb(207, 180, 180);
     }
   
 }
 .channel {
     float: left;
     clear: right;
-    text-align: center;
+    text-align: start;
     margin-left: 1vw;
  }
  .input {
@@ -30,30 +28,30 @@
 .descript {
     color: rgb(121, 110, 110);
     padding: 0.5vw;
-    width: 87vw
+    width: 75vw;
 }
 .searchDiv{
     width: 98vw;
 }
 .search{
     margin: 1vw;
-    border-radius: 0.5vw;
-    height: 1.5vw;
+    border-radius: 1rem;
+    height: 1.5rem;
 }
 .trash {
     position: absolute;
-    left: 90vw;
+    left: 80vw;
     margin: 0.5vw;
 }
 .theme {
-    font-size: 2vw;
+    font-size: 2rem;
     color:rgb(66, 11, 216);
 }
 
 .thumbnails {
-    width: 2.6vw;
+    width: 2.5rem;
     border-radius: 50%;
     float: left;
-    margin: 0.3vw;
+    margin: 0.2vw 0.5vw;
 }
        

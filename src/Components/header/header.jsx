@@ -9,7 +9,7 @@ const Header = () => {
     }
     return (
         <div className={styles.head}>
-            <span className={styles.header}>YouTube monitor</span>
+            <div className={styles.header}>YouTube monitor</div>
             <MenuButtons />
             <button className={styles.clearDB} onClick={onClick}>clear DB</button>
         </div>
