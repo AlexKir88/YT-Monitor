@@ -29,9 +29,12 @@ const Subscribes = ({channels, addChannel, delChannel, currentTheme}) => {
             {channels.map((item) => {
                 return (
                     <div className={styles.channels} key={item.id}>
-                            <BsTrash size={23} className={styles.trash} onClick={() => delChannel(item.id)} />
-                            <div className={styles.channel}>{item.title} </div>  
-                            <div className={styles.descript}>{item.description} </div>              
+                        <div>
+                            <img className={styles.thumbnails} src={item.thumbnails} alt={item.title}/>
+                            <div className={styles.channel}>{item.title} </div> 
+                        </div>
+                        <BsTrash size={23} className={styles.trash} onClick={() => delChannel(item.id)} />
+                        <div className={styles.descript}>{item.description} </div>              
                     </div> 
                 )
             })}

@@ -30,7 +30,7 @@
 .descript {
     color: rgb(121, 110, 110);
     padding: 0.5vw;
-    clear: left;
+    width: 87vw
 }
 .searchDiv{
     width: 98vw;
@@ -49,3 +49,11 @@
     font-size: 2vw;
     color:rgb(66, 11, 216);
 }
+
+.thumbnails {
+    width: 2.6vw;
+    border-radius: 50%;
+    float: left;
+    margin: 0.3vw;
+}
+       

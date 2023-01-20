@@ -20,7 +20,7 @@ const Groups = ({dispatch, addGroup, groups, delGroup}) => {
         if(e.target.toString() === '[object SVGSVGElement]') return;
         dispatch({
             type: 'GROUP',
-            theme: e.target.value
+            group: e.target.value
         })
         e.preventDefault();
     };
@@ -31,7 +31,7 @@ const Groups = ({dispatch, addGroup, groups, delGroup}) => {
 
     return (
         <div>
-            <input className={styles.input} onKeyDown={pressEnter} placeholder='input name theme...'/>
+            <input className={styles.input} onKeyDown={pressEnter} placeholder='input name group...'/>
             <div className={styles.press}>Press 'Enter' for add theme</div>
             <div onClick={passAction}>
                 {groups.map((item) => {

@@ -10,10 +10,10 @@ const Main = ({currentMenu, currentGroup, filterPeriod,  dispatch}) => {
     const [groups, setGroups] = useState(['---']);
     const [channels, setChannels] = useState(['---']);
     const [videos, setVideos] = useState();
+    
     useEffect(() => {
         getGroups(setGroups);
     },[] );
-    
     useEffect(() => {
         getChannels(currentGroup, setChannels, setVideos, filterPeriod);
     },[currentGroup, filterPeriod])
@@ -22,7 +22,7 @@ const Main = ({currentMenu, currentGroup, filterPeriod,  dispatch}) => {
         await findGetChannel(nameChannel, currentGroup);
         getChannels(currentGroup, setChannels, setVideos, filterPeriod);
     }
-    const delChannel = async (id) => {
+    const delChannel = (id) => {
         deleteChannel(id, currentGroup) ;
         getChannels(currentGroup, setChannels, setVideos, filterPeriod);
     }

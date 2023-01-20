@@ -1,14 +1,28 @@
 export const API_KEY = [
-    'AIzaSyBhOuuC0gOEvTyNXcYAx5SEFCt0xFw-YwQ',
-    'AIzaSyD3P-54FcONK98IvAkc-U2K-va7KrlsvWc',
-    'AIzaSyBGhjGT88pmeiwRImhEuufQDxAecgZQKZY',
-    'AIzaSyCIp4PmyP8a6NZlKP7ijRP6wmEo19qGdGA',
-    'AIzaSyCuafXwM2F2ojfxbZBiLqX1dF84OYKmUio'
+    'AIzaSyBhOuuC0gOEvTyNXcYAx5SEFCt0xFw-YwQ', //43485
+    'AIzaSyD3P-54FcONK98IvAkc-U2K-va7KrlsvWc', //67051
+    'AIzaSyBGhjGT88pmeiwRImhEuufQDxAecgZQKZY', //43070
+    // 'AIzaSyCIp4PmyP8a6NZlKP7ijRP6wmEo19qGdGA', //45895
+    // 'AIzaSyCuafXwM2F2ojfxbZBiLqX1dF84OYKmUio'  //6827
 ];
+
+//way 1 get key
 let RandomIndexKeyAPI = () => {
     const index = Math.random().toString(API_KEY.length);
     return Number(index[5]);
 }
+//way 2 get key
+let indexKey = 0;
+const getToggleKey = async (callback) => {
+    if (indexKey + 1 < API_KEY.length) {
+        indexKey++
+        console.log(indexKey + '/' + API_KEY[indexKey]);
+        await callback();
+        return
+    }
+    console.log('keys be lose')
+}
+
 
 export const dayPreInMonth = () => {
     const currentDate = new Date();
@@ -27,6 +41,7 @@ const defaultChannels= [
             На данном канала, Вы найдете обучающие уроки по разработке, дизайну и маркетингу. А так же большие плейлисты с разработкой реальных проектов с 0.
             https://redlinks.space/
             Подписывайся и следи за нами!`,
+        thumbnails: "https://yt3.googleusercontent.com/7-zEe8SeUX5KPncXBLjgWINwWD6OLQuSy4whjPOoTVsufPR-fGFjR8egyBn9sAFtQPntbXQnBKk=s800-c-k-c0xffffffff-no-rj-mo"
     },
     {
         id:"UCDzGdB9TTgFm8jRXn1tBdoA",
@@ -42,6 +57,7 @@ const defaultChannels= [
 
             Qiwi кошелек - http://qiwi.com/n/BODYE821​
             Яндекс деньги - https://yoomoney.ru/to/4100116193037469  `,
+        thumbnails: "https://yt3.googleusercontent.com/ytc/AMLnZu9K44a6ao-Tv-6ib3oY_-1RIen0nlNE_NwlsdL3=s800-c-k-c0xffffffff-no-rj-mo"
     },
 
 ]
@@ -78,66 +94,48 @@ export const deleteChannel = (id, nameGroup) => {
 
 
 
-export const findGetChannel = async (nameChannel, nameTheme, counter = 0) => {
-
-    
-    let keyAPI = API_KEY[RandomIndexKeyAPI()];
+export const findGetChannel = async (nameChannel, nameGroup) => {
+    // let keyAPI = API_KEY[RandomIndexKeyAPI()];
     const url = new URL('https://youtube.googleapis.com/youtube/v3/search');
     url.searchParams.set('q', nameChannel);
+    url.searchParams.set('part', 'snippet');
     url.searchParams.set('type', 'channel');
-    url.searchParams.set('key', keyAPI );
+    // url.searchParams.set('key', keyAPI );
+    url.searchParams.set('key', API_KEY[indexKey] );
     url.searchParams.set('maxResults', 1);
     let response = await fetch(url);
     console.log(response);
     if(response.status === 403) {
-        if (counter > (API_KEY.length + 1) * 3) {
-            console.log('key limit');
-            return;
-        }
-        findGetChannel(nameChannel, nameTheme, counter++);
+        await getToggleKey(() => findGetChannel(nameChannel, nameGroup ));
         return;
+        // if (counter > (API_KEY.length + 1) * 3) {
+        //     console.log('key limit');
+        //     return;
+        // }
+        // findGetChannel(nameChannel, nameGroup );
+        // return;
     }
     let json = await response.json();
     let channel = json.items[0];
     if (!channel) return;
-    
-    const urlChannel = new URL('https://youtube.googleapis.com/youtube/v3/channels');
-    urlChannel.searchParams.set('part', 'snippet');
-    urlChannel.searchParams.set('id', channel.id.channelId);
-    urlChannel.searchParams.set('key', keyAPI);
-    let responseChannel = await fetch(urlChannel);
-    
-
-    if(responseChannel.status === 403) {
-        if (counter > (API_KEY.length + 1) * 3) {
-            console.log('key limit');
-            return;
-        }
-        findGetChannel(nameChannel, nameTheme, counter++);
-        return;
-    }
-
-    console.log(responseChannel);
-    let jsonChannel = await responseChannel.json();
-    const channelDada = jsonChannel.items[0];
 
      const newObject = {
-        id: channelDada.id,
-        title: channelDada.snippet.title,
-        description: channelDada.snippet.description ,
+        id: channel.id.channelId,
+        title: channel.snippet.title,
+        description: channel.snippet.description,
+        thumbnails: 'https://yt3.googleusercontent.com' + new URL(channel.snippet.thumbnails.high.url).pathname,
     };
 
     const mainDB = indexedDB.open('main',1);
     mainDB.onsuccess = () => {
         const transaction = mainDB.result.transaction('store','readwrite');
         const channels = transaction.objectStore('store');
-        const request = channels.get(nameTheme);
+        const request = channels.get(nameGroup);
         request.onsuccess = () => {
            const oldValues =  request.result;
-           channels.put([...oldValues, newObject], nameTheme )
+           channels.put([...oldValues, newObject], nameGroup )
         }
     }
-    localStorage.setItem('requestCount', +localStorage.getItem('requestCount') + 1);
 }
 
 
@@ -208,31 +206,34 @@ export const deleteGroup = (nameGroup) => {
 export const getVideos = async (channels, setVideos, filterPeriod, dateStart = new Date()) => {
     //if(channels = ?prevChannels)
     //counter not work, may be cause async await
-    let indexKeyAPI = RandomIndexKeyAPI();
-    console.log(indexKeyAPI);
+    // let indexKeyAPI = RandomIndexKeyAPI();
+    // console.log(indexKeyAPI);
 
     const currentDate = new Date(new Date().setHours(0,0,0,0));
     const publishedAfter = new Date(currentDate.setDate(currentDate.getDate() - filterPeriod)).toISOString();
     let videos = [];
     for(let item of channels) {
         const urlVideos = new URL(' https://youtube.googleapis.com/youtube/v3/search');
-        // urlVideos.searchParams.append('part', "contentDetails");
         urlVideos.searchParams.set('part', 'snippet'); 
         urlVideos.searchParams.set('channelId',item.id);
         urlVideos.searchParams.set('eventType','none');
         urlVideos.searchParams.set('maxResults',10);
         urlVideos.searchParams.set('type','video');
-        urlVideos.searchParams.set('key', API_KEY[indexKeyAPI] );
+        // urlVideos.searchParams.set('key', API_KEY[indexKeyAPI] );
+        urlVideos.searchParams.set('key', API_KEY[indexKey] );
         urlVideos.searchParams.set('publishedAfter', publishedAfter);
+        // urlVideos.searchParams.set('forContentOwner', true);
         // urlVideos.searchParams.append('pageToken', 'pageToken');
         let responseVideos = await fetch(urlVideos);
         if(responseVideos.status === 403) {
-            if ( new Date() - dateStart > 10000) {
-                alert('API key quota exceeded');
-                return false;
-            }
-            await getVideos(channels, setVideos, filterPeriod, dateStart);
-            return false;
+            await getToggleKey(() => getVideos(channels, setVideos, filterPeriod, dateStart));
+            return;
+            // if ( new Date() - dateStart > 10000) {
+            //     alert('API key quota exceeded');
+            //     return false;
+            // }
+            // await getVideos(channels, setVideos, filterPeriod, dateStart);
+            // return false;
         }
         let jsonVideos = await responseVideos.json();
         jsonVideos?.items?.forEach(element => {

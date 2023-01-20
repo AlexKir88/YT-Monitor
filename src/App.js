@@ -49,9 +49,6 @@ createStorage();
 
 
 function App() {
-  useEffect(() => {
-    console.log('App')
-  },[])
   return (
     <Provider store={store}>
       <div className="App">
