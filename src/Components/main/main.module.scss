@@ -1,3 +1,14 @@
 .main{
     display: flex;
+    justify-content: space-around;
+}
+.textAbout {
+    margin: 5vw;
+    background-color: rgb(232, 226, 218);
+    width: 80vw;
+    line-height: 2rem;
+    padding: 1rem;
+    font-family:  sans-serif;
+    border-radius: 3rem;
+    white-space: unset;
 }

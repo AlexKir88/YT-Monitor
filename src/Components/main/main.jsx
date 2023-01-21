@@ -5,6 +5,7 @@ import {getChannels, findGetChannel, deleteChannel, createGroup, getGroups, dele
 import Subscribes from './Subscribes';
 import { connect } from 'react-redux';
 import Groups from './Groups';
+import About from './About';
 
 const Main = ({currentMenu, currentGroup, filterPeriod,  dispatch}) => {
     const [groups, setGroups] = useState(['---']);
@@ -44,8 +45,9 @@ const Main = ({currentMenu, currentGroup, filterPeriod,  dispatch}) => {
     return (
         <div className={styles.main}>
             {currentMenu === 'Videos' && <Video videos={videos}  />}
-            {currentMenu === 'Subscribes' && <Subscribes channels={channels}  addChannel={addChannel} delChannel={delChannel} currentTheme={currentGroup}/>}
+            {currentMenu === 'Subscribes' && <Subscribes channels={channels}  addChannel={addChannel} delChannel={delChannel} currentGroup={currentGroup}/>}
             {currentMenu === 'Groups' && <Groups  addGroup={addGroup} groups={groups} delGroup={delGroup}/>}
+            {currentMenu === 'About' && <About  />}
         </div>
     )
 }

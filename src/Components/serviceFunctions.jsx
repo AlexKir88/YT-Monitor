@@ -3,7 +3,7 @@ export const API_KEY = [
     'AIzaSyD3P-54FcONK98IvAkc-U2K-va7KrlsvWc', //67051
     'AIzaSyBGhjGT88pmeiwRImhEuufQDxAecgZQKZY', //43070
     'AIzaSyCIp4PmyP8a6NZlKP7ijRP6wmEo19qGdGA', //45895
-    // 'AIzaSyCuafXwM2F2ojfxbZBiLqX1dF84OYKmUio'  //6827
+    'AIzaSyCuafXwM2F2ojfxbZBiLqX1dF84OYKmUio'  //6827
 ];
 
 //way 1 get key
@@ -126,6 +126,12 @@ export const findGetChannel = async (nameChannel, nameGroup) => {
         const request = channels.get(nameGroup);
         request.onsuccess = () => {
            const oldValues =  request.result;
+           let haveDuble = oldValues.find((item) => {
+            return item.id === newObject.id;
+           });
+           if(haveDuble) {
+            console.log(`error, double of channel "${newObject.title}"`)
+            return};
            channels.put([...oldValues, newObject], nameGroup )
         }
     }

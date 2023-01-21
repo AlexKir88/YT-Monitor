@@ -1,8 +1,9 @@
 import styles from './Subscribes.module.scss';
 import { BsTrash } from 'react-icons/bs';
+import { connect } from 'react-redux';
 
 
-const Subscribes = ({channels, addChannel, delChannel, currentTheme}) => {
+const Subscribes = ({channels, addChannel, delChannel, currentGroup, language}) => {
 
     const pressEnter = (e) => {
         if (!(e.code === 'Enter' || e.code === 'NumpadEnter')) {
@@ -16,13 +17,16 @@ const Subscribes = ({channels, addChannel, delChannel, currentTheme}) => {
       
         e.target.value = '';
     }
-  
+    const checkDefaultGroup = (group) => {
+        if(group === 'Default') return language.defaultGroup;
+        return group;
+    }
     return (
         <div> 
             <div className={styles.searchDiv}>
-                <input type='text' placeholder="Search channel..." className={styles.search} onKeyDown={pressEnter} />
-                <div>Press Enter</div>
-                <div className={styles.theme}>{currentTheme}</div>
+                <input type='text' placeholder={language.placeholderSearch} className={styles.search} onKeyDown={pressEnter} />
+                <div>{language.pressEnter}</div>
+                <div className={styles.theme}>{checkDefaultGroup(currentGroup)}</div>
             </div>
             {channels.map((item) => {
                 return (
@@ -39,5 +43,9 @@ const Subscribes = ({channels, addChannel, delChannel, currentTheme}) => {
         </div>
     )
 }
-
-export default Subscribes;
+const mapStateFromProps = ({language}) => {
+    return {
+        language
+    }
+}
+export default connect(mapStateFromProps)(Subscribes);

@@ -2,7 +2,7 @@ import styles from './Groups.module.scss';
 import { connect } from 'react-redux';
 import { BsTrash } from 'react-icons/bs';
 
-const Groups = ({dispatch, addGroup, groups, delGroup}) => {
+const Groups = ({dispatch, addGroup, groups, delGroup, language}) => {
 
     const pressEnter = (e) => {
         if (!(e.code === 'Enter' || e.code === 'NumpadEnter')) {
@@ -35,14 +35,18 @@ const Groups = ({dispatch, addGroup, groups, delGroup}) => {
 
     return (
         <div>
-            <input className={styles.input} onKeyDown={pressEnter} placeholder='  input name group...'/>
-            <div className={styles.press}>Press 'Enter' for add group</div>
+            <input className={styles.input} onKeyDown={pressEnter} placeholder={language.inputName}/>
+            <div className={styles.press}>{language.pressEnterGroup}</div>
             <div onClick={passAction} className={styles.groupList}>
                 {groups.map((item) => {
                     let visibility = item === 'Default' ? 'hidden': 'visible';
+                    let chechDefaultGroup = (item) => {
+                        if(item === 'Default') return language.defaultGroup;
+                        return item;
+                    }
                     return (
                         <div key={item}>
-                            <button  className={styles.button} name={item}>{item} 
+                            <button  className={styles.button} name={item}>{chechDefaultGroup(item)} 
                                 <BsTrash size={20} className={styles.trash} style={{visibility}} onClick={(e) => deleteGroup(e, item)} />
                             </button>
                         </div>)
@@ -51,5 +55,9 @@ const Groups = ({dispatch, addGroup, groups, delGroup}) => {
         </div>
     )
 }
-
-export default connect()(Groups)
+const mapStateFromProps = ({language}) => {
+    return {
+        language
+    }
+}
+export default connect(mapStateFromProps)(Groups)
