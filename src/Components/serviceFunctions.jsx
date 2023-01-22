@@ -1,28 +1,5 @@
-export const API_KEY = [
-    'AIzaSyBhOuuC0gOEvTyNXcYAx5SEFCt0xFw-YwQ', //43485
-    'AIzaSyD3P-54FcONK98IvAkc-U2K-va7KrlsvWc', //67051
-    'AIzaSyBGhjGT88pmeiwRImhEuufQDxAecgZQKZY', //43070
-    'AIzaSyCIp4PmyP8a6NZlKP7ijRP6wmEo19qGdGA', //45895
-    'AIzaSyCuafXwM2F2ojfxbZBiLqX1dF84OYKmUio'  //6827
-];
-
-//way 1 get key
-let RandomIndexKeyAPI = () => {
-    const index = Math.random().toString(API_KEY.length);
-    return Number(index[5]);
-}
-//way 2 get key
-let indexKey = 0;
-const getToggleKey = async (callback) => {
-    if (indexKey + 1 < API_KEY.length) {
-        indexKey++
-        console.log(indexKey + '/' + API_KEY[indexKey]);
-        await callback();
-        return
-    }
-    console.log('keys be lose')
-}
-
+export const API_KEY = 'AIzaSyB-x1SwWq9bDSdaj_BBwmE83VCATWfNkcU'
+    
 
 export const dayPreInMonth = () => {
     const currentDate = new Date();
@@ -41,7 +18,8 @@ const defaultChannels= [
             На данном канала, Вы найдете обучающие уроки по разработке, дизайну и маркетингу. А так же большие плейлисты с разработкой реальных проектов с 0.
             https://redlinks.space/
             Подписывайся и следи за нами!`,
-        thumbnails: "https://yt3.googleusercontent.com/7-zEe8SeUX5KPncXBLjgWINwWD6OLQuSy4whjPOoTVsufPR-fGFjR8egyBn9sAFtQPntbXQnBKk=s800-c-k-c0xffffffff-no-rj-mo"
+        thumbnails: "https://yt3.googleusercontent.com/7-zEe8SeUX5KPncXBLjgWINwWD6OLQuSy4whjPOoTVsufPR-fGFjR8egyBn9sAFtQPntbXQnBKk=s800-c-k-c0xffffffff-no-rj-mo",
+        customUrl: '@redgroup'
     },
     {
         id:"UCDzGdB9TTgFm8jRXn1tBdoA",
@@ -57,7 +35,8 @@ const defaultChannels= [
 
             Qiwi кошелек - http://qiwi.com/n/BODYE821​
             Яндекс деньги - https://yoomoney.ru/to/4100116193037469  `,
-        thumbnails: "https://yt3.googleusercontent.com/ytc/AMLnZu9K44a6ao-Tv-6ib3oY_-1RIen0nlNE_NwlsdL3=s800-c-k-c0xffffffff-no-rj-mo"
+        thumbnails: "https://yt3.googleusercontent.com/ytc/AMLnZu9K44a6ao-Tv-6ib3oY_-1RIen0nlNE_NwlsdL3=s800-c-k-c0xffffffff-no-rj-mo",
+        customUrl: "@ulbitv"
     },
 ]
 
@@ -94,29 +73,42 @@ export const deleteChannel = (id, nameGroup) => {
 
 
 export const findGetChannel = async (nameChannel, nameGroup) => {
-    // let keyAPI = API_KEY[RandomIndexKeyAPI()];
-    const url = new URL('https://youtube.googleapis.com/youtube/v3/search');
-    url.searchParams.set('q', nameChannel);
-    url.searchParams.set('part', 'snippet');
-    url.searchParams.set('type', 'channel');
-    // url.searchParams.set('key', keyAPI );
-    url.searchParams.set('key', API_KEY[indexKey] );
-    url.searchParams.set('maxResults', 1);
-    let response = await fetch(url);
+    const urlSearh = new URL('https://youtube.googleapis.com/youtube/v3/search');
+    urlSearh.searchParams.set('q', nameChannel);
+    urlSearh.searchParams.set('part', 'snippet');
+    urlSearh.searchParams.set('type', 'channel');
+    urlSearh.searchParams.set('key', API_KEY);
+    urlSearh.searchParams.set('maxResults', 1);
+    let response = await fetch(urlSearh);
     console.log(response);
     if(response.status === 403) {
-        await getToggleKey(() => findGetChannel(nameChannel, nameGroup ));
+        console.log('keys be lose')
         return;
     }
     let json = await response.json();
-    let channel = json.items[0];
-    if (!channel) return;
+    let foundChannel = json.items[0];
+    if (!foundChannel) return;
+
+    const urlChannel = new URL('https://youtube.googleapis.com/youtube/v3/channels');
+    urlChannel.searchParams.set('part', 'snippet');
+    urlChannel.searchParams.set('id', foundChannel.id.channelId);
+    urlChannel.searchParams.set('key', API_KEY);
+    urlChannel.searchParams.set('maxResults', 1);
+    let responseChannel = await fetch(urlChannel);
+    console.log(responseChannel);
+    if(responseChannel.status === 403) {
+        console.log('keys be lose')
+        return;
+    }
+    let jsonChannel = await responseChannel.json();
+    let channel = jsonChannel.items[0];
 
      const newObject = {
-        id: channel.id.channelId,
+        id: channel.id,
         title: channel.snippet.title,
         description: channel.snippet.description,
         thumbnails: 'https://yt3.googleusercontent.com' + new URL(channel.snippet.thumbnails.high.url).pathname,
+        customUrl: channel.snippet.customUrl,
     };
 
     const mainDB = indexedDB.open('main',1);
@@ -202,44 +194,70 @@ export const deleteGroup = (nameGroup) => {
     }
 }
 
+//block parse videos
+
+const getString = (chuncText, start, end) => {
+	const from = chuncText.indexOf(start)
+	const to = chuncText.indexOf(end, from)
+
+	return chuncText.substring(from, to).replace(start, '')
+}
+
+const parseVideo = (text, channelTitle) => {
+	const title = getString(
+		text,
+		'"title":{"runs":[{"text":"',
+		'"}],"accessibility":'
+	);
+
+	const videoId = getString(
+		text,
+		':{"videoId":"',
+		'\",\"watchEndpointSupportedOnesieConfig'
+	);
+
+    const duration = JSON.parse(getString(
+		text,
+		'"lengthText":',
+		',"viewCountText"'
+	)).simpleText;
+
+    const publishedAt = getString(
+		text,
+		'"publishedTimeText":{"simpleText":"',
+		'"},"lengthText"'
+	);
+
+	const thumbnail = getString(
+        text, 
+        `","thumbnail":{"thumbnails":[{"url":"`, 
+        '","width"');
+
+	return { title, videoId, thumbnail, duration, publishedAt, channelTitle }
+}
+
 export const getVideos = async (channels, setVideos, filterPeriod, dateStart = new Date()) => {
-    // let indexKeyAPI = RandomIndexKeyAPI();
-    // console.log(indexKeyAPI);
-    const currentDate = new Date(new Date().setHours(0,0,0,0));
-    const publishedAfter = new Date(currentDate.setDate(currentDate.getDate() - filterPeriod)).toISOString();
     let videos = [];
-    for(let item of channels) {
-        const urlVideos = new URL(' https://youtube.googleapis.com/youtube/v3/search');
-        urlVideos.searchParams.set('part', 'snippet'); 
-        urlVideos.searchParams.set('channelId',item.id);
-        urlVideos.searchParams.set('eventType','none');
-        urlVideos.searchParams.set('maxResults',10);
-        urlVideos.searchParams.set('type','video');
-        // urlVideos.searchParams.set('key', API_KEY[indexKeyAPI] );
-        urlVideos.searchParams.set('key', API_KEY[indexKey] );
-        urlVideos.searchParams.set('publishedAfter', publishedAfter);
-        // urlVideos.searchParams.set('forContentOwner', true);
-        // urlVideos.searchParams.append('pageToken', 'pageToken');
-        let responseVideos = await fetch(urlVideos);
-        if(responseVideos.status === 403) {
-            await getToggleKey(() => getVideos(channels, setVideos, filterPeriod, dateStart));
-            return;
+    for(let channel of channels) {
+        let responseVideos = await fetch(`http://localhost:8010/proxy/${channel.customUrl}/videos`);
+        if (!responseVideos.ok) {
+            throw new Error(`Error! status: ${responseVideos.status}`);
         }
-        let jsonVideos = await responseVideos.json();
-        jsonVideos?.items?.forEach(element => {
-            videos.push({
-                videoId: element.id.videoId,
-                thumbnails: element.snippet.thumbnails.high.url,
-                publishedAt: element.snippet.publishedAt,
-                channelTitle: element.snippet.channelTitle,
-                title: element.snippet.title,
-            })
-        });
-        console.log(responseVideos);
-        console.log(item.title);           
+        let pageVideos = await responseVideos.text();
+        let arrayVideos = pageVideos.split('","thumbnail":{"thumbnails":[{"url":"');
+        arrayVideos.forEach((item) => {
+            try{
+                let video = parseVideo(item, channel.title);
+                videos.push(video);
+            } catch(err){
+                console.log(err);
+            }
+            
+        })
+        
     }
-    const sortVideos = videos?.sort((a, b) =>  new Date(b.publishedAt) - +new Date(a.publishedAt));
-    setVideos(sortVideos) ;
+    // const sortVideos = videos?.sort((a, b) => a < b ? 1 : -1 );
+    setVideos(videos) ;
     return true;
 }
             

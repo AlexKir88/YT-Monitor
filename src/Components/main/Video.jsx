@@ -16,12 +16,12 @@ const Video = ({videos}) => {
                                  <a  href={`https://www.youtube.com/watch?v=${item.videoId}`} target = '_blank'  className={styles.anchor}> 
                                 <img 
                                     className={styles.video} 
-                                    src = {item.thumbnails}
+                                    src = {item.thumbnail}
                                     alt='name'
                                 />
                                 <div className={styles.nameVideo}>{item.title}</div>
                                 <div className={styles.channel}>{item.channelTitle}</div>
-                                <div className={styles.date}>{new Date(item.publishedAt).toLocaleDateString('ru')}</div>
+                                <div className={styles.date}>{item.publishedAt}</div>
                                 </a>
                             </div>
                         )

@@ -5,10 +5,11 @@
 .textAbout {
     margin: 5vw;
     background-color: rgb(232, 226, 218);
-    width: 80vw;
+    width: 75vw;
     line-height: 2rem;
-    padding: 1rem;
+    padding: 1rem 4rem;
     font-family:  sans-serif;
     border-radius: 3rem;
-    white-space: unset;
+    white-space: pre-line;
+    text-align: left;
 }
