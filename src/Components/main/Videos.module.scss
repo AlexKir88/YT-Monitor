@@ -11,24 +11,14 @@
         border: 2px red solid;
     }
 }
-@media only screen and (max-width: 600px) {
-    .video {
-        border: 2px solid rgb(78, 24, 24);
-        margin: auto 1vw;
-        border-radius: 5vw;
-        width: 90vw;
 
-        &:hover {
-            border: 2px red solid;
-        }
-    }
-}
 .flexItem {
     text-align: left;
     text-decoration: none;
     font-family: arial;
     font-size: 0.9vw;
     display: inline-block;
+    
 }
 
 .channel {
@@ -59,4 +49,40 @@
     padding: 0 1.5vw;
     color: black;
     font-size: 0.9rem;
+}
+.duration {
+    position: relative;
+    font-size: 1rem;
+    left: 15vw;
+    bottom: 8vw;
+    color: white;
+    width: 2.7rem;
+    height: 1.1rem;
+    background-color: black;
+    border-radius: 3px;
+    text-align: right;
+    padding: 0 0.2vw;
+}
+@media only screen and (max-width: 600px) {
+    .video {
+        border: 2px solid rgb(78, 24, 24);
+        margin: auto 1vw;
+        border-radius: 5vw;
+        width: 98vw;
+        justify-content: center;
+        &:hover {
+            border: 2px red solid;
+        }
+    }
+    .videos {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+    .duration {
+        left: 50vw;
+        width: 11vw;
+        top: -15vh;
+    }
 }

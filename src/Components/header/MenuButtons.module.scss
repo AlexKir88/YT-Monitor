@@ -1,0 +1,15 @@
+.buttonMenu {
+    min-width: 10vw;
+    position: relative;
+    margin: 1.5vw;
+}
+@media only screen and (max-width: 600px) {
+    .buttonMenu {
+        width: 22vw;
+        margin: 0.5vw;
+        font-size: 1rem;
+        height: 2.5rem;
+        overflow: hidden;
+    }
+}
+

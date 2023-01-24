@@ -1,4 +1,4 @@
-import styles from './header.module.scss';
+import styles from './MenuButtons.module.scss';
 import { connect } from 'react-redux';
 
 const MenuButtons = ({dispatch, currentMenu, language}) => {

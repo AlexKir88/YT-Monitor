@@ -1,6 +1,6 @@
 import { useState, useEffect, useTransition } from 'react';
 import styles from './main.module.scss'
-import Video from './Video';
+import Videos from './Videos';
 import {getChannels, findGetChannel, deleteChannel, createGroup, getGroups, deleteGroup} from '../serviceFunctions';
 import Subscribes from './Subscribes';
 import { connect } from 'react-redux';
@@ -44,7 +44,7 @@ const Main = ({currentMenu, currentGroup, filterPeriod,  dispatch}) => {
     
     return (
         <div className={styles.main}>
-            {currentMenu === 'Videos' && <Video videos={videos}  />}
+            {currentMenu === 'Videos' && <Videos videos={videos}  />}
             {currentMenu === 'Subscribes' && <Subscribes channels={channels}  addChannel={addChannel} delChannel={delChannel} currentGroup={currentGroup}/>}
             {currentMenu === 'Groups' && <Groups  addGroup={addGroup} groups={groups} delGroup={delGroup}/>}
             {currentMenu === 'About' && <About  />}
@@ -52,7 +52,7 @@ const Main = ({currentMenu, currentGroup, filterPeriod,  dispatch}) => {
     )
 }
 
-const mapStateFromProps = ({currentMenu,currentGroup,filterPeriod}) => {
+const mapStateFromProps = ({currentMenu, currentGroup, filterPeriod}) => {
     return {
         currentMenu,
         currentGroup,

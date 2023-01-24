@@ -1,11 +1,10 @@
 import styles from './DatePublish.module.scss';
 import { connect } from 'react-redux';
-import { dayPreInMonth } from '../serviceFunctions';
+import { objTimeIndex } from '../dateFunction';
 
-const countDay = dayPreInMonth();
 const DatePublish = ({filterPeriod, language, dispatch}) => {
-    const setStyle = (num) => {
-        if (num == filterPeriod) {
+    const setStyle = (indexPeriod) => {
+        if (indexPeriod == filterPeriod) {
             return '5px solid rgb(141, 137, 130, 0.5)'
         }
         return '';
@@ -21,9 +20,10 @@ const DatePublish = ({filterPeriod, language, dispatch}) => {
     }
     return (
         <div className={styles.footer} onClick={onClick}>
-            <button className={styles.button} val={1} style={{border : setStyle(1)}}> {language.buttonDay}</button>
-            <button className={styles.button} val={7} style={{border : setStyle(7)}}> {language.buttonWeek}</button>
-            <button className={styles.button} val={countDay} style={{border : setStyle(countDay)}}> {language.buttonMonth}</button>
+            <button className={styles.button} val={objTimeIndex.day} style={{border : setStyle(objTimeIndex.day)}}> {language.buttonDay}</button>
+            <button className={styles.button} val={objTimeIndex.wee} style={{border : setStyle(objTimeIndex.wee)}}> {language.buttonWeek}</button>
+            <button className={styles.button} val={objTimeIndex.mon} style={{border : setStyle(objTimeIndex.mon)}}> {language.buttonMonth}</button>
+            <button className={styles.button} val={objTimeIndex.yea} style={{border : setStyle(objTimeIndex.yea)}}> {language.buttonYear}</button>
         </div>
     )
 }

@@ -1,4 +1,8 @@
-
+let langBrowser = window.navigator.language;
+export let defoultLang = () => {
+    if (langBrowser.startsWith('ru')) return RU;
+    return EN;
+}
 
 export const EN = {
     id: 'EN',
@@ -9,6 +13,8 @@ export const EN = {
     buttonDay: 'day',
     buttonWeek: 'week',
     buttonMonth: 'month',
+    buttonYear: 'year',
+    buttonAll: 'all',
     buttonClearDB: 'clear DB',
     placeholderSearch: '  Search channel...',
     pressEnter: 'Press enter',
@@ -31,6 +37,8 @@ export const RU = {
     buttonDay: 'день',
     buttonWeek: 'неделя',
     buttonMonth: 'месяц',
+    buttonYear: 'год',
+    buttonAll: 'все',
     buttonClearDB: 'очистить БД',
     placeholderSearch: '  Поиск канала...',
     pressEnter: 'Нажмите "Enter"',

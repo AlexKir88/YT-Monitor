@@ -1,4 +1,4 @@
-import styles from './main.module.scss'
+import styles from './About.module.scss'
 import { connect } from 'react-redux';
 
 const About = ({language}) => {

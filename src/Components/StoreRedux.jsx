@@ -1,11 +1,9 @@
 import { combineReducers } from "redux";
 import { RU, EN } from "./languages";
+import { objTimeIndex } from "./dateFunction";
+import { defoultLang } from "./languages";
 
-let langBrowser = window.navigator.language;
-let defoultLang = () => {
-    if (langBrowser.startsWith('ru')) return RU;
-    return EN;
-}
+
 const currentMenu = ( state = 'Videos', action) =>{
   switch(action.type){
     case 'MENU':  return  action.menu ;
@@ -20,7 +18,7 @@ const currentGroup = ( state = 'Default', action) =>{
   }
 };
 
-const filterPeriod = ( state = 7, action) =>{
+const filterPeriod = ( state = objTimeIndex.wee, action) =>{
   switch(action.type){
     case 'PERIOD': return action.filterPeriod ;
     default:  return state;
@@ -38,7 +36,7 @@ const language = ( state = RU, action) =>{
 export const initState = {
   currentMenu: 'Videos',
   currentGroup: 'Default',
-  filterPeriod: 7,
+  filterPeriod: objTimeIndex.wee,
   language: defoultLang()
 };
 

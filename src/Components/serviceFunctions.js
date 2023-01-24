@@ -1,44 +1,6 @@
-export const API_KEY = 'AIzaSyB-x1SwWq9bDSdaj_BBwmE83VCATWfNkcU'
-    
+import { parseVideo } from "./parseVideos";
+import { API_KEY, defaultChannels } from "./defoultData";
 
-export const dayPreInMonth = () => {
-    const currentDate = new Date();
-    const lastDayPreMonth = new Date(currentDate.getFullYear(),currentDate.getMonth(),0,0,0,0,0).getDate()
-    return lastDayPreMonth ;
-}
-
-
-const defaultChannels= [
-    {
-        id:"UCdpPBwKPriPIP2eyP9a1C6g",
-        title: "RED Group",
-        description: `htmllessons.ru - Интерактивные курсы #1 по созданию сайтов,  наша главная цель — подготовить профессионалов.
-            Обучение идет таким образом, чтобы максимально дать вам первый толчок в IT-индустрии. Далее после изучения наших курсов, вы будете готовы работать по данной профессии, будь то IT-компания или фриланс. Сделайте шаг к успешной карьере!
-
-            На данном канала, Вы найдете обучающие уроки по разработке, дизайну и маркетингу. А так же большие плейлисты с разработкой реальных проектов с 0.
-            https://redlinks.space/
-            Подписывайся и следи за нами!`,
-        thumbnails: "https://yt3.googleusercontent.com/7-zEe8SeUX5KPncXBLjgWINwWD6OLQuSy4whjPOoTVsufPR-fGFjR8egyBn9sAFtQPntbXQnBKk=s800-c-k-c0xffffffff-no-rj-mo",
-        customUrl: '@redgroup'
-    },
-    {
-        id:"UCDzGdB9TTgFm8jRXn1tBdoA",
-        title: 'Ulbi TV',
-        description: `Привет друзья!) Меня зовут Ульби Тимур. Я fullstack разработчик)
-            На моем канале будут размещаться видео уроки посвященные программированию, здесь вы найдете много полезного по разным темам, javascript, backend, frontend, базы данных, алгоритмы и многое другое!)
-
-            Telegram канал для общения - https://t.me/ulbi_tv
-
-            Поддержать меня и мой канал вы можете по ссылкам ниже.
-
-            Patreon/boosty - https://boosty.to/ulbitv
-
-            Qiwi кошелек - http://qiwi.com/n/BODYE821​
-            Яндекс деньги - https://yoomoney.ru/to/4100116193037469  `,
-        thumbnails: "https://yt3.googleusercontent.com/ytc/AMLnZu9K44a6ao-Tv-6ib3oY_-1RIen0nlNE_NwlsdL3=s800-c-k-c0xffffffff-no-rj-mo",
-        customUrl: "@ulbitv"
-    },
-]
 
 export const getChannels = async (group, setChannels, setVideos, filterPeriod) => {
     const mainDB = indexedDB.open('main', 1);
@@ -194,51 +156,10 @@ export const deleteGroup = (nameGroup) => {
     }
 }
 
-//block parse videos
-
-const getString = (chuncText, start, end) => {
-	const from = chuncText.indexOf(start)
-	const to = chuncText.indexOf(end, from)
-
-	return chuncText.substring(from, to).replace(start, '')
-}
-
-const parseVideo = (text, channelTitle) => {
-	const title = getString(
-		text,
-		'"title":{"runs":[{"text":"',
-		'"}],"accessibility":'
-	);
-
-	const videoId = getString(
-		text,
-		':{"videoId":"',
-		'\",\"watchEndpointSupportedOnesieConfig'
-	);
-
-    const duration = JSON.parse(getString(
-		text,
-		'"lengthText":',
-		',"viewCountText"'
-	)).simpleText;
-
-    const publishedAt = getString(
-		text,
-		'"publishedTimeText":{"simpleText":"',
-		'"},"lengthText"'
-	);
-
-	const thumbnail = getString(
-        text, 
-        `","thumbnail":{"thumbnails":[{"url":"`, 
-        '","width"');
-
-	return { title, videoId, thumbnail, duration, publishedAt, channelTitle }
-}
-
 export const getVideos = async (channels, setVideos, filterPeriod, dateStart = new Date()) => {
     let videos = [];
     for(let channel of channels) {
+        // let responseVideos = await fetch(`https://www.youtube.com/${channel.customUrl}/videos`);
         let responseVideos = await fetch(`http://localhost:8010/proxy/${channel.customUrl}/videos`);
         if (!responseVideos.ok) {
             throw new Error(`Error! status: ${responseVideos.status}`);
@@ -252,12 +173,11 @@ export const getVideos = async (channels, setVideos, filterPeriod, dateStart = n
             } catch(err){
                 console.log(err);
             }
-            
         })
         
     }
-    // const sortVideos = videos?.sort((a, b) => a < b ? 1 : -1 );
-    setVideos(videos) ;
+    const sortVideos = videos?.sort((a, b) => a.timeIndex > b.timeIndex ? 1 : -1 );
+    setVideos(sortVideos) ;
     return true;
 }
             
