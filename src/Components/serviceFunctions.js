@@ -1,6 +1,6 @@
 import { parseVideo } from "./parseVideos";
-import { API_KEY, defaultChannels } from "./defoultData";
-
+import { defaultChannels } from "./defoultData";
+import { API_KEY } from "./privatData";
 
 export const getChannels = async (group, setChannels, setVideos, filterPeriod) => {
     const mainDB = indexedDB.open('main', 1);
@@ -42,7 +42,7 @@ export const findGetChannel = async (nameChannel, nameGroup) => {
     urlSearh.searchParams.set('key', API_KEY);
     urlSearh.searchParams.set('maxResults', 1);
     let response = await fetch(urlSearh);
-    console.log(response);
+    // console.log(response);
     if(response.status === 403) {
         console.log('keys be lose')
         return;
@@ -57,9 +57,8 @@ export const findGetChannel = async (nameChannel, nameGroup) => {
     urlChannel.searchParams.set('key', API_KEY);
     urlChannel.searchParams.set('maxResults', 1);
     let responseChannel = await fetch(urlChannel);
-    console.log(responseChannel);
+    // console.log(responseChannel);
     if(responseChannel.status === 403) {
-        console.log('keys be lose')
         return;
     }
     let jsonChannel = await responseChannel.json();
@@ -156,11 +155,15 @@ export const deleteGroup = (nameGroup) => {
     }
 }
 
-export const getVideos = async (channels, setVideos, filterPeriod, dateStart = new Date()) => {
+export const getVideos = async (channels, setVideos, ) => {
     let videos = [];
     for(let channel of channels) {
-        // let responseVideos = await fetch(`https://www.youtube.com/${channel.customUrl}/videos`);
-        let responseVideos = await fetch(`http://localhost:8010/proxy/${channel.customUrl}/videos`);
+        let responseVideos;
+        if(window.navigation.currentEntry.url.includes('http://localhost:300')) {
+            responseVideos = await fetch(`http://localhost:8010/proxy/${channel.customUrl}/videos`);
+        } else {
+            responseVideos = await fetch(`https://www.youtube.com/${channel.customUrl}/videos`);
+        }
         if (!responseVideos.ok) {
             throw new Error(`Error! status: ${responseVideos.status}`);
         }
@@ -171,7 +174,7 @@ export const getVideos = async (channels, setVideos, filterPeriod, dateStart = n
                 let video = parseVideo(item, channel.title);
                 videos.push(video);
             } catch(err){
-                console.log(err);
+                // console.log(err);
             }
         })
         

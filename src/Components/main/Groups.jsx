@@ -20,7 +20,7 @@ const Groups = ({dispatch, addGroup, groups, delGroup, language}) => {
         if(e.target.toString() === '[object SVGSVGElement]') return;
         dispatch({
             type: 'GROUP',
-            group: e.target.name
+            group: e.target.name || 'Default'
         })
          dispatch({
             type: 'MENU',

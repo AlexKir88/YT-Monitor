@@ -1,11 +1,46 @@
 .textAbout {
-    margin: 5vw;
+    margin: 1vw 5vw;
     background-color: rgb(232, 226, 218);
-    width: 75vw;
+    max-width: 90vw;
     line-height: 2rem;
     padding: 1rem 4rem;
     font-family: sans-serif;
     border-radius: 3rem;
     white-space: pre-line;
     text-align: left;
+}
+    
+.textFeedback {
+    margin: 1vw 5vw;
+    background-color: rgb(232, 226, 218);
+    max-width: 60vw;
+    line-height: 2rem;
+    padding: 0.3rem 4rem;
+    font-family: sans-serif;
+    border-radius: 3rem;
+    text-align: left;
+}
+.input {
+    position: relative;
+    left: -10vw;
+    margin: 0.5vw auto;
+    display: block;
+    width: 20vw;
+    line-height: 0.5rem;
+    padding: 0.3rem 1rem;
+    border-radius: 3rem;
+}
+.area {
+    display: block;
+    width: 50vw;
+    height: 5rem;
+    line-height: 1rem;
+    padding: 0.5rem 2rem;
+    border-radius: 3rem;
+}
+.button {
+    border-radius: 3rem;
+    border: 1px solid red;
+    position: relative;
+    left: 30vw;
 }

@@ -26,6 +26,11 @@ export const EN = {
     The list of channels for the selected group is filled in the "Subscriptions" section.\r
     Important! The service is tied to a specific device and browser, so it does not require authorization,
     but you will not be able to access your data online from another device.`,
+    buttonSend: 'Send',
+    Feedback: 'Feedback',
+    placeholderName: '  name...',
+    placeholderContact: '  telephone, email, anything...',
+    placeholderContent: '   Descript you problem...',
 }
 
 export const RU = {
@@ -50,4 +55,9 @@ export const RU = {
     Cписок каналов для выбранной группы, заполняется в разделе "Подписки".
     Важно! Сервис привязан к конкретному устройству и браузеру, поэтому не требует авторизации,
     но и получить онлайн доступ к своим данным с другого устройства вы не сможете.`,
+    buttonSend: 'Отправить',
+    Feedback: 'Обратная связь',
+    placeholderName: '  имя...',
+    placeholderContact: '  телефон, email, что угодно...',
+    placeholderContent: '   Опишите вашу проблему...',
 }

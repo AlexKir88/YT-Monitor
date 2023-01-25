@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 
 const Videos = ({videos, filterPeriod}) => {
     let videosList = videos?.filter((item) => {
-        console.log(item.timeIndex + '/' + filterPeriod)
         return item.timeIndex <= filterPeriod
     })
     return (

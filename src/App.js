@@ -5,6 +5,7 @@ import { createStore } from 'redux';
 import { Provider } from 'react-redux';
 import {createStorage} from './Components/serviceFunctions'
 import { reducer, initState } from './Components/StoreRedux';
+// import { send } from './Components/privatData';
 
 const store = createStore(reducer, initState);
 createStorage();
@@ -19,5 +20,8 @@ function App() {
     </Provider>
   );
 }
+
+// document.onload = () => send('enter');
+// document.beforeunload = () => send('exit');
 
 export default App;

@@ -1,6 +1,4 @@
-export const API_KEY = 'AIzaSyB-x1SwWq9bDSdaj_BBwmE83VCATWfNkcU'
-    
-
+ 
 export const defaultChannels= [
     {
         id:"UCdpPBwKPriPIP2eyP9a1C6g",

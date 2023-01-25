@@ -13,7 +13,9 @@
     "react-scripts": "5.0.1",
     "redux": "^4.2.0",
     "sass": "^1.57.1",
-    "web-vitals": "^2.1.4"
+    "to-know-ip": "^1.0.4-alpha",
+    "web-vitals": "^2.1.4",
+    "webrtc-ips": "^0.2.0"
   },
   "scripts": {
     "start": "react-scripts start",
