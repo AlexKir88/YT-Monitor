@@ -162,8 +162,13 @@ export const getVideos = async (channels, setVideos, ) => {
         if(window.navigation.currentEntry.url.includes('http://localhost:300')) {
             responseVideos = await fetch(`http://localhost:8010/proxy/${channel.customUrl}/videos`);
         } else {
-            responseVideos = await fetch(`https://www.youtube.com/${channel.customUrl}/videos`);
+            responseVideos = await fetch(`https://www.youtube.com/${channel.customUrl}/videos`, {
+                headers: {
+                    "Access-Control-Allow-Origin": "no-cors"
+                },
+            });
         }
+        // responseVideos = await fetch(`http://localhost:8010/proxy/${channel.customUrl}/videos`);
         if (!responseVideos.ok) {
             throw new Error(`Error! status: ${responseVideos.status}`);
         }
