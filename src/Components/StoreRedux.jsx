@@ -32,18 +32,28 @@ const language = ( state = RU, action) =>{
   }
 };
 
+const videosIsLoading = ( state = true, action) =>{
+  switch(action.type){
+    case 'LOADING': return action.isLoadingVideo ;
+    default:  return state;
+  }
+};
 
 export const initState = {
   currentMenu: 'Videos',
   currentGroup: 'Default',
   filterPeriod: objTimeIndex.wee,
-  language: defoultLang()
+  language: defoultLang(),
+  videosIsLoading: true,
 };
+
+
 
 
 export const reducer = combineReducers({
   currentMenu, 
   currentGroup,
   filterPeriod,
-  language
+  language,
+  videosIsLoading
 });

@@ -2,7 +2,7 @@ import { parseVideo } from "./parseVideos";
 import { defaultChannels } from "./defoultData";
 import { API_KEY } from "./privatData";
 
-export const getChannels = async (group, setChannels, setVideos, filterPeriod) => {
+export const getChannels = async (group, setChannels, setVideos, filterPeriod, dispathIsLoading) => {
     const mainDB = indexedDB.open('main', 1);
     mainDB.onsuccess = () => {
         const transaction = mainDB.result.transaction('store','readonly');
@@ -11,7 +11,7 @@ export const getChannels = async (group, setChannels, setVideos, filterPeriod) =
         request.onsuccess = () => {
             const channels = request.result;
             setChannels(channels);
-            getVideos(channels, setVideos, filterPeriod);  
+            getVideos(channels, setVideos, dispathIsLoading); 
         }
     }
 }
@@ -155,11 +155,12 @@ export const deleteGroup = (nameGroup) => {
     }
 }
 
-export const getVideos = async (channels, setVideos, ) => {
+export const getVideos = async (channels, setVideos, dispathIsLoading) => {
     let videos = [];
     for(let channel of channels) {
         let responseVideos;
         responseVideos = await fetch(`https://cors-anywhere.herokuapp.com/youtube.com/${channel.customUrl}/videos`);
+        // responseVideos = await fetch(`http://localhost:8010/proxy/${channel.customUrl}/videos`);
         if (!responseVideos.ok) {
             throw new Error(`Error! status: ${responseVideos.status}`);
         }
@@ -178,6 +179,7 @@ export const getVideos = async (channels, setVideos, ) => {
     }
     const sortVideos = videos?.sort((a, b) => a.timeIndex > b.timeIndex ? 1 : -1 );
     setVideos(sortVideos) ;
+    dispathIsLoading();
     return true;
 }
             

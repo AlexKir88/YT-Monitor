@@ -14,6 +14,10 @@ const DatePublish = ({filterPeriod, language, dispatch}) => {
             dispatch({
                 type: 'PERIOD',
                 filterPeriod: e.target.getAttribute('val')
+            });
+            dispatch({
+                type: 'LOADING',
+                isLoadingVideo: true
             })
         }
         e.preventDefault();

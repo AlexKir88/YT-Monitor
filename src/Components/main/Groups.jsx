@@ -26,6 +26,10 @@ const Groups = ({dispatch, addGroup, groups, delGroup, language}) => {
             type: 'MENU',
             menu: 'Subscribes'
         })
+        dispatch({
+            type: 'LOADING',
+            isLoadingVideo: true
+        })
         e.preventDefault();
     };
     const deleteGroup = (e, item) => {

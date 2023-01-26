@@ -8,7 +8,7 @@ const About = ({language}) => {
             let name = e.currentTarget[0].value;
             let contacts = e.currentTarget[1].value;
             let contents = e.currentTarget[2].value;
-            sendInTlg('/' + name + '/' + contacts + '/' + contents);
+            sendInTlg('/' + 'message' + '/' + name + '/' + contacts + '/' + contents + '/');
             e.currentTarget[0].value = '';
             e.currentTarget[1].value = '';
             e.currentTarget[2].value = '';

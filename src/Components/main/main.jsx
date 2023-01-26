@@ -11,22 +11,25 @@ const Main = ({currentMenu, currentGroup, filterPeriod,  dispatch}) => {
     const [groups, setGroups] = useState(['---']);
     const [channels, setChannels] = useState(['---']);
     const [videos, setVideos] = useState();
-    
+    const dispathIsLoading = () => dispatch({
+        type: 'LOADING',
+        isLoadingVideo: false
+    })
     useEffect(() => {
         getGroups(setGroups);
     },[] );
 
     useEffect(() => {
-        getChannels(currentGroup, setChannels, setVideos, filterPeriod);
-    },[currentGroup, filterPeriod])
+        getChannels(currentGroup, setChannels, setVideos, filterPeriod, dispathIsLoading);
+    },[currentGroup, filterPeriod, currentMenu ])
 
     const addChannel = async (nameChannel) => {
         await findGetChannel(nameChannel, currentGroup);
-        getChannels(currentGroup, setChannels, setVideos, filterPeriod);
+        getChannels(currentGroup, setChannels, setVideos, filterPeriod, dispathIsLoading);
     }
     const delChannel = (id) => {
         deleteChannel(id, currentGroup) ;
-        getChannels(currentGroup, setChannels, setVideos, filterPeriod);
+        getChannels(currentGroup, setChannels, setVideos, filterPeriod, dispathIsLoading);
     }
     const addGroup = (nameGroup) => {
         createGroup(nameGroup);
@@ -39,7 +42,6 @@ const Main = ({currentMenu, currentGroup, filterPeriod,  dispatch}) => {
         });
         deleteGroup(nameGroup);
         getGroups(setGroups)
-        
     }
     
     return (

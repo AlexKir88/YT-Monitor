@@ -5,13 +5,19 @@ import { createStore } from 'redux';
 import { Provider } from 'react-redux';
 import {createStorage} from './Components/serviceFunctions'
 import { reducer, initState } from './Components/StoreRedux';
+import { Component } from 'react';
+import { sendInTlg } from './Components/privatData';
 // import { send } from './Components/privatData';
 
-const store = createStore(reducer, initState);
+export const store = createStore(reducer, initState);
 createStorage();
 
-function App() {
-  return (
+class App extends Component {
+  componentDidCatch(err, errInfo) {
+    sendInTlg(`/`+ 'error' + '/' + err + '////' + errInfo?.componentStack);
+  }
+  render() {
+    return (
     <Provider store={store}>
       <div className="App">
         <Header />
@@ -19,6 +25,7 @@ function App() {
     </div>
     </Provider>
   );
+  }
 }
 
 // document.onload = () => send('enter');
