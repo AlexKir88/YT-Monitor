@@ -11,6 +11,7 @@
     border: none;
     font-family:  serif;
     &:hover {
+        min-height: 4rem;;
         height: auto;
         background-color: rgb(207, 180, 180);
     }

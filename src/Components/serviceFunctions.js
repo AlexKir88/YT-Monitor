@@ -159,15 +159,12 @@ export const getVideos = async (channels, setVideos, ) => {
     let videos = [];
     for(let channel of channels) {
         let responseVideos;
-        if(window.navigation.currentEntry.url.includes('http://localhost:300')) {
-            responseVideos = await fetch(`http://localhost:8010/proxy/${channel.customUrl}/videos`);
-        } else {
-            responseVideos = await fetch(`https://www.youtube.com/${channel.customUrl}/videos`);
-        }
+        responseVideos = await fetch(`https://cors-anywhere.herokuapp.com/youtube.com/${channel.customUrl}/videos`);
         if (!responseVideos.ok) {
             throw new Error(`Error! status: ${responseVideos.status}`);
         }
         let pageVideos = await responseVideos.text();
+
         let arrayVideos = pageVideos.split('","thumbnail":{"thumbnails":[{"url":"');
         arrayVideos.forEach((item) => {
             try{
