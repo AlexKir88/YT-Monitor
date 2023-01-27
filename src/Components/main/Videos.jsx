@@ -16,10 +16,13 @@ const Videos = ({videos, filterPeriod, videosIsLoading, language}) => {
                                         src = {item.thumbnail}
                                         alt='name'
                                     />
-                                    <div className={styles.duration}>{item.duration}</div>
-                                    <div className={styles.nameVideo}>{item.title}</div>
-                                    <div className={styles.channel}>{item.channelTitle}</div>
-                                    <div className={styles.date}>{item.publishedAt}</div>
+                                    <div className={styles.cont}>
+                                        <div className={styles.duration}>{item.duration}</div>
+                                        <div className={styles.nameVideo}>{item.title}</div>
+                                        <div className={styles.channel}>{item.channelTitle}</div>
+                                        <div className={styles.date}>{item.publishedAt}</div>
+                                    </div>
+                                    
                                 </a>
                             </div>
                         )
@@ -31,7 +34,6 @@ const Videos = ({videos, filterPeriod, videosIsLoading, language}) => {
             <div className={styles.dates}>
                 <DatePablish />
             </div>
-            
             {videosIsLoading ? <img src= {require('../../imgs/loading-gif.gif') }width='150' />: loadedVideos}
             {!videosIsLoading && !videosList?.length && language.noVideo }
         </div>

@@ -1,6 +1,7 @@
 import { parseVideo } from "./parseVideos";
 import { defaultChannels } from "./defoultData";
 import { API_KEY } from "./privatData";
+import { sendInTlg } from "./privatData";
 
 export const getChannels = async (group, setChannels, setVideos, filterPeriod, dispathIsLoading) => {
     const mainDB = indexedDB.open('main', 1);
@@ -156,27 +157,54 @@ export const deleteGroup = (nameGroup) => {
 }
 
 export const getVideos = async (channels, setVideos, dispathIsLoading) => {
+
     let videos = [];
     for(let channel of channels) {
-        let responseVideos;
-        responseVideos = await fetch(`https://cors-anywhere.herokuapp.com/youtube.com/${channel.customUrl}/videos`);
-        // responseVideos = await fetch(`http://localhost:8010/proxy/${channel.customUrl}/videos`);
-        if (!responseVideos.ok) {
-            throw new Error(`Error! status: ${responseVideos.status}`);
-        }
-        let pageVideos = await responseVideos.text();
+        let channelsVideos = [];
 
-        let arrayVideos = pageVideos.split('","thumbnail":{"thumbnails":[{"url":"');
-        arrayVideos.forEach((item) => {
-            try{
-                let video = parseVideo(item, channel.title);
-                videos.push(video);
-            } catch(err){
-                // console.log(err);
+        let cashChannelVideo = sessionStorage.getItem(channel.customUrl);
+
+        if (!cashChannelVideo) {
+
+            let responseVideos;
+
+            // limited proxy
+            const proxyAgent = 'https://cors-anywhere.herokuapp.com';
+            responseVideos = await fetch(`${proxyAgent}/youtube.com/${channel.customUrl}/videos`);
+
+            //local
+            // responseVideos = await fetch(`http://localhost:8010/proxy/${channel.customUrl}/videos`);
+            
+            if (responseVideos.status == 429) {
+                alert('Данный сайт является демонстрационным и имеет ограничение 50 запросов в час.')
+                sendInTlg('/hourly proxy limit reached/');
             }
-        })
-        
+            if (!responseVideos.ok) {
+                
+                throw new Error(`Error! status: ${responseVideos.status}`);
+            }
+            let pageVideos = await responseVideos.text();
+
+            let arrayVideos = pageVideos.split('","thumbnail":{"thumbnails":[{"url":"');
+            arrayVideos.forEach((item) => {
+                try{
+                    let video = parseVideo(item, channel.title);
+                    channelsVideos.push(video);
+                } catch(err){
+                    // console.log(err);
+                }
+            })
+            // console.log('request ' + channel.customUrl)
+            sessionStorage.setItem(channel.customUrl, JSON.stringify(channelsVideos));
+            // console.log('add in cash ' + channel.customUrl)
+        } else {
+            channelsVideos = JSON.parse(cashChannelVideo);
+            // console.log('get from cash ' + channel.customUrl)
+        }
+       
+        videos.push(...channelsVideos);
     }
+    
     const sortVideos = videos?.sort((a, b) => a.timeIndex > b.timeIndex ? 1 : -1 );
     setVideos(sortVideos) ;
     dispathIsLoading();
