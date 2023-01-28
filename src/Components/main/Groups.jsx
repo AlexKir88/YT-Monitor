@@ -5,7 +5,7 @@ import { BsTrash } from 'react-icons/bs';
 const Groups = ({dispatch, addGroup, groups, delGroup, language}) => {
 
     const pressEnter = (e) => {
-        if (!(e.code === 'Enter' || e.code === 'NumpadEnter')) {
+        if (!(e.code === 'Enter' || e.code === 'NumpadEnter' || e.keyCode === 13)) {
             return
         };
         if (!e.target.value) {

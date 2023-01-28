@@ -28,6 +28,7 @@ const getobjTimeIndex = () => {
 
 export let objTimeIndex = getobjTimeIndex().EN;
 const currentLang = defoultLang();  
+
 export const calkTimeIndex = (timeString) => {
   let objTimes = objTimeIndex;
   if (currentLang.id == 'RU') {
@@ -36,4 +37,12 @@ export const calkTimeIndex = (timeString) => {
     const arrTime = timeString.split(' ');
     const timeIndex = arrTime[0] * objTimes[arrTime[1].slice(0, 3)];
     return timeIndex;
+}
+
+export const calkTimeIndexFromDate = (dateString) => {
+  
+  const dateVideo = new Date(dateString);
+  let indexTime = new Date() - dateVideo;
+
+  return indexTime;
 }

@@ -1,12 +1,13 @@
+import { useRef, useState } from 'react';
 import styles from './Subscribes.module.scss';
 import { BsTrash } from 'react-icons/bs';
 import { connect } from 'react-redux';
 
 
 const Subscribes = ({channels, addChannel, delChannel, currentGroup, language}) => {
-
+    const notFound =useRef();
     const pressEnter = (e) => {
-        if (!(e.code === 'Enter' || e.code === 'NumpadEnter')) {
+        if (!(e.code === 'Enter' || e.code === 'NumpadEnter' || e.keyCode === 13)) {
             return
         };
         if (!e.target.value) {
@@ -25,6 +26,7 @@ const Subscribes = ({channels, addChannel, delChannel, currentGroup, language}) 
         <div> 
             <div className={styles.searchDiv}>
                 <input type='text' placeholder={language.placeholderSearch} className={styles.search} onKeyDown={pressEnter} />
+                <div className={styles.notFound} ref={notFound}>not found channel</div>
                 <div>{language.pressEnter}</div>
                 <div className={styles.theme}>{checkDefaultGroup(currentGroup)}</div>
             </div>
@@ -34,9 +36,9 @@ const Subscribes = ({channels, addChannel, delChannel, currentGroup, language}) 
                         <div>
                             <img className={styles.thumbnails} src={item.thumbnails} alt={item.title}/>
                             <div className={styles.channel}>{item.title} </div> 
+                            <div className={styles.descript}>{item.description} </div> 
+                            <BsTrash size={23} className={styles.trash} onClick={() => delChannel(item.id)} />
                         </div>
-                        <BsTrash size={23} className={styles.trash} onClick={() => delChannel(item.id)} />
-                        <div className={styles.descript}>{item.description} </div>              
                     </div> 
                 )
             })}

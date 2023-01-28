@@ -24,8 +24,9 @@ const Main = ({currentMenu, currentGroup, filterPeriod,  dispatch}) => {
     },[currentGroup, filterPeriod, currentMenu ])
 
     const addChannel = async (nameChannel) => {
-        await findGetChannel(nameChannel, currentGroup);
+        let founded = await findGetChannel(nameChannel, currentGroup);
         getChannels(currentGroup, setChannels, setVideos, filterPeriod, dispathIsLoading);
+        return founded;
     }
     const delChannel = (id) => {
         deleteChannel(id, currentGroup) ;

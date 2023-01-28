@@ -52,6 +52,7 @@
     left: 77vw;
     margin: 0.5vw;
     z-index: 1000;
+    top: 0.1vw;
 }
 .theme {
     font-size: 2rem;
@@ -64,4 +65,23 @@
     float: left;
     margin: 0.2vw 0.5vw;
 }
-       
+.notFound {
+    position: fixed;
+    left: 25vw;
+    width: 50vw;
+    height: 2vw;
+    color: white;
+    background-color: rgb(67, 71, 70, 0.5);
+    border: 1px solid white;
+    display: none
+}
+
+@media only screen and (max-width: 600px) {
+    .descript {
+        width: 55vw;
+        height: 2.2rem;
+    }
+    .channels {
+        max-width: 85vw;
+    }
+}
