@@ -4,6 +4,7 @@ const getobjTimeIndex = () => {
   const startToDayTimestamp = new Date().setHours(0,0,0,0); 
   const startDay = new Date(startToDayTimestamp);
   const oneMonthTimestump = startToDayTimestamp - new Date(startDay).setMonth(startDay.getMonth() - 1);
+  const treeMonthTimestump = startToDayTimestamp - new Date(startDay).setMonth(startDay.getMonth() - 3);
   const oneYearTimestump = startToDayTimestamp - startDay.setFullYear(startDay.getFullYear() - 1);
   let objsTimeIndex = {};
   objsTimeIndex.EN = {
@@ -12,6 +13,7 @@ const getobjTimeIndex = () => {
     day: 1000 * 60 * 60 * 24,
     wee: 1000 * 60 * 60 * 24 * 7,
     mon: oneMonthTimestump,
+    mo3: treeMonthTimestump,
     yea: oneYearTimestump,
   };
   objsTimeIndex.RU = {
@@ -21,6 +23,7 @@ const getobjTimeIndex = () => {
     ден: 1000 * 60 * 60 * 24,
     нед: 1000 * 60 * 60 * 24 * 7,
     мес: oneMonthTimestump,
+    ме3: treeMonthTimestump,
     год: oneYearTimestump,
   }
   return objsTimeIndex;

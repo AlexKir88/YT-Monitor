@@ -29,12 +29,17 @@ const Videos = ({videos, filterPeriod, videosIsLoading, language}) => {
                        
                     })}
             </div>)
+    let Spinner = (
+        <div className={styles.spinner}>
+                <img src= {require('../../imgs/loading-gif.gif') }width='150' />
+        </div>
+    )
     return (
         <div>
             <div className={styles.dates}>
                 <DatePablish />
             </div>
-            {videosIsLoading ? <img src= {require('../../imgs/loading-gif.gif') }width='150' />: loadedVideos}
+            {videosIsLoading ? Spinner: loadedVideos}
             {!videosIsLoading && !videosList?.length && language.noVideo }
         </div>
         

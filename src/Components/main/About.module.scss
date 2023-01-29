@@ -44,3 +44,10 @@
     position: relative;
     left: 30vw;
 }
+@media only screen and (max-width: 600px) {
+    .textAbout {
+        margin: 1vw 5vw;
+        line-height: 1rem;
+        padding: 1rem 1rem;
+        }
+}

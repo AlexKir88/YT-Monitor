@@ -70,6 +70,10 @@
     position: relative;
     bottom: 9%;
 }
+.spinner {
+    position: relative;
+    top: 12vh;
+}
 
 @media only screen and (max-width: 600px) {
     .video {
@@ -88,6 +92,7 @@
         flex-direction: column;
         justify-content: center;
         align-items: center;
+        overflow: scroll;
     }
     .duration {
         bottom: 10vw;

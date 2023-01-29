@@ -45,9 +45,10 @@ export const findGetChannel = async (nameChannel, nameGroup) => {
     urlSearh.searchParams.set('maxResults', 1);
     let response = await fetch(urlSearh);
     // console.log(response);
-    if(response.status === 403) {
-        console.log('keys be lose')
-        return;
+   if (response.status == 403) {
+        alert('Превышен суточный лимит запросов через API youtube.');
+        sendInTlg('/403 limit API youtube /');
+        return false;
     }
     let json = await response.json();
     let foundChannel = json.items[0];
@@ -60,8 +61,10 @@ export const findGetChannel = async (nameChannel, nameGroup) => {
     urlChannel.searchParams.set('maxResults', 1);
     let responseChannel = await fetch(urlChannel);
     // console.log(responseChannel);
-    if(responseChannel.status === 403) {
-        return;
+    if (responseChannel.status == 403) {
+        alert('Превышен суточный лимит запросов через API youtube.');
+        sendInTlg('/403 limit API youtube /');
+        return false;
     }
     let jsonChannel = await responseChannel.json();
     let channel = jsonChannel.items[0];
@@ -171,12 +174,9 @@ export const getVideos = async (channels, setVideos, dispathIsLoading) => {
             if(!channelsVideos.length) {
                 channelsVideos = await requestVideosAPIYoutube(channel);
             }
-            // console.log('request ' + channel.customUrl)
             sessionStorage.setItem(channel.customUrl, JSON.stringify(channelsVideos));
-            // console.log('add in cash ' + channel.customUrl)
         } else {
             channelsVideos = JSON.parse(cashChannelVideo);
-            // console.log('get from cash ' + channel.customUrl)
         }
         videos.push(...channelsVideos);
     }
@@ -198,17 +198,31 @@ async function requestVideosParseProxy(channel) {
     //local
     // responseVideos = await fetch(`http://localhost:8010/proxy/${channel.customUrl}/videos`);
     
-    if (responseVideos.status == 429) {
-        alert('Данный сайт является демонстрационным и имеет ограничение 50 запросов в час.');
-
+    if ((responseVideos.status == 403) && (localStorage.id  == 2.293)) {
+        const question ='Данный сайт является демонстрационным и имеет ограничение 50 запросов в час. Перейти для продления на https://cors-anywhere.herokuapp.com/corsdemo?';
+        let res = window.confirm(question);
+        if(res) {
+            let pageProxy = document.createElement('a');
+            pageProxy.href = 'https://cors-anywhere.herokuapp.com/corsdemo?';
+            pageProxy.target = '_blank';
+            pageProxy.click();
+            // window.location.href = 'https://cors-anywhere.herokuapp.com/corsdemo?';
+        }
         sendInTlg('/429 hourly proxy limit reached/');
+        return thisChannelsVideos;
     }
-        if (responseVideos.status == 403) {
+    if ((responseVideos.status == 403) && (localStorage.id  == 2.293)) {
         const question = 'Превышен лимит запросов через прокси. Перейти для продления на https://cors-anywhere.herokuapp.com/corsdemo?';
         let res = window.confirm(question);
-        if(res) window.location.href = 'https://cors-anywhere.herokuapp.com/corsdemo?';
-
+        if(res) {
+            let pageProxy = document.createElement('a');
+            pageProxy.href = 'https://cors-anywhere.herokuapp.com/corsdemo?';
+            pageProxy.target = '_blank';
+            pageProxy.click();
+            // window.location.href = 'https://cors-anywhere.herokuapp.com/corsdemo?';
+        }
         sendInTlg('/403 need push button on https://cors-anywhere.herokuapp.com/corsdemo /');
+        return thisChannelsVideos;
     }
     if (!responseVideos.ok) {
         
@@ -231,17 +245,22 @@ async function requestVideosParseProxy(channel) {
 async function requestVideosAPIYoutube(item, pageToken) {
     let channelsVideosYT = [];
     const currentDate = new Date(new Date().setHours(0,0,0,0));
-    const publishedAfter = new Date(currentDate.setFullYear(currentDate.getFullYear() - 1)).toISOString();
+    const publishedAfter = new Date(currentDate.setMonth(currentDate.getMonth() - 3)).toISOString();
         const urlVideos = new URL(' https://youtube.googleapis.com/youtube/v3/search');
         urlVideos.searchParams.set('part', 'snippet'); 
         urlVideos.searchParams.set('channelId',item.id);
         urlVideos.searchParams.set('eventType','none');
-        urlVideos.searchParams.set('maxResults',100);
+        urlVideos.searchParams.set('maxResults',50);
         urlVideos.searchParams.set('type','video');
         urlVideos.searchParams.set('key', API_KEY );
         urlVideos.searchParams.set('publishedAfter', publishedAfter);
         pageToken && urlVideos.searchParams.set('pageToken', pageToken);
         let responseVideos = await fetch(urlVideos);
+        if (responseVideos.status == 403) {
+            alert('Превышен лимит запросов через API youtube.');
+            sendInTlg('/403 limit API youtube /');
+            return channelsVideosYT;
+        }
         let jsonVideos = await responseVideos.json();
         jsonVideos?.items?.forEach(element => {
             channelsVideosYT.push({
@@ -253,13 +272,13 @@ async function requestVideosAPIYoutube(item, pageToken) {
                 timeIndex: calkTimeIndexFromDate(element.snippet.publishedAt),
             })
         });
-        let nextPageToken = jsonVideos.nextPageToken;
-        if (nextPageToken) {
-            let nextPageVideos = await requestVideosAPIYoutube(item, nextPageToken);
-            channelsVideosYT.push(...nextPageVideos);
-        }
+        // let nextPageToken = jsonVideos.nextPageToken;
+        // if (nextPageToken) {
+        //     let nextPageVideos = await requestVideosAPIYoutube(item, nextPageToken);
+        //     channelsVideosYT.push(...nextPageVideos);
+        // }
         // console.log(responseVideos);
                  
     return channelsVideosYT;
 }
-            
+

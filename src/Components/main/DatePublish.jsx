@@ -27,7 +27,8 @@ const DatePublish = ({filterPeriod, language, dispatch}) => {
             <button className={styles.button} val={objTimeIndex.day} style={{border : setStyle(objTimeIndex.day)}}> {language.buttonDay}</button>
             <button className={styles.button} val={objTimeIndex.wee} style={{border : setStyle(objTimeIndex.wee)}}> {language.buttonWeek}</button>
             <button className={styles.button} val={objTimeIndex.mon} style={{border : setStyle(objTimeIndex.mon)}}> {language.buttonMonth}</button>
-            <button className={styles.button} val={objTimeIndex.yea} style={{border : setStyle(objTimeIndex.yea)}}> {language.buttonYear}</button>
+            <button className={styles.button} val={objTimeIndex.mo3} style={{border : setStyle(objTimeIndex.mo3)}}> {language.buttonMonth3}</button>
+            {/* <button className={styles.button} val={objTimeIndex.yea} style={{border : setStyle(objTimeIndex.yea)}}> {language.buttonYear}</button> */}
         </div>
     )
 }
