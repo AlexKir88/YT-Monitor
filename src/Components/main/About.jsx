@@ -1,6 +1,6 @@
 import styles from './About.module.scss'
 import { connect } from 'react-redux';
-import { sendInTlg } from '../privatData';
+import { sendInTlg } from '../../service functions/privatData';
 
 const About = ({language}) => {
     const send = (e) => {

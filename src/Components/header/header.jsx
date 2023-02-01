@@ -1,10 +1,10 @@
 import styles from './header.module.scss';
 import MenuButtons from './MenuButtons';
 import { connect } from 'react-redux';
-import { RU, EN } from '../languages';
+import { RU, EN } from '../../service functions/languages'; 
 
 const Header = ({language, dispatch}) => {
-    const onClick = (e) => {
+    const clearDB = (e) => {
         indexedDB.deleteDatabase('main');
         console.log('DB delete');
         e.preventDefault();
@@ -38,7 +38,7 @@ const Header = ({language, dispatch}) => {
                 <button onClick={toggleRus} ref={mathLang} name="RU">RU</button>
                 <button onClick={toggleEng} ref={mathLang} name="EN">EN</button>
             </div>
-            <button className={styles.clearDB} onClick={onClick}>{language.buttonClearDB}</button>
+            <button className={styles.clearDB} onClick={clearDB}>{language.buttonClearDB}</button>
         </div>
     )
 }

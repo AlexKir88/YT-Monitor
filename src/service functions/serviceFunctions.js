@@ -12,6 +12,7 @@ export const getChannels = async (group, setChannels, setVideos, filterPeriod, d
         const request = groups.get(group);
         request.onsuccess = () => {
             const channels = request.result;
+            if(!channels) return;
             setChannels(channels);
             getVideos(channels, setVideos, dispathIsLoading); 
         }
@@ -162,7 +163,7 @@ export const deleteGroup = (nameGroup) => {
 }
 
 export const getVideos = async (channels, setVideos, dispathIsLoading) => {
-
+    // if (!channels) return;
     let videos = [];
     for(let channel of channels) {
         let channelsVideos = [];
@@ -215,11 +216,11 @@ async function requestVideosParseProxy(channel) {
         const question = 'Превышен лимит запросов через прокси. Перейти для продления на https://cors-anywhere.herokuapp.com/corsdemo?';
         let res = window.confirm(question);
         if(res) {
-            let pageProxy = document.createElement('a');
-            pageProxy.href = 'https://cors-anywhere.herokuapp.com/corsdemo?';
-            pageProxy.target = '_blank';
-            pageProxy.click();
-            // window.location.href = 'https://cors-anywhere.herokuapp.com/corsdemo?';
+            // let pageProxy = document.createElement('a');
+            // pageProxy.href = 'https://cors-anywhere.herokuapp.com/corsdemo?';
+            // pageProxy.target = '_blank';
+            // pageProxy.click();
+            window.location.href = 'https://cors-anywhere.herokuapp.com/corsdemo?';
         }
         sendInTlg('/403 need push button on https://cors-anywhere.herokuapp.com/corsdemo /');
         return thisChannelsVideos;

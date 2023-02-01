@@ -23,7 +23,7 @@ export const EN = {
     inputName: '  input name group...',
     pressEnterGroup: 'Press "Enter" for add group',
     defaultGroup: 'Default',
-    about: ` This project aims to simplify the management of YuoTube subscriptions.The number of subscriptions can be large and have different topics.
+    about: ` This project aims to simplify the management of YouTube subscriptions.The number of subscriptions can be large and have different topics.
     Therefore, the user has a chance to miss an important video.This service allows you to create groups of channels in the "Groups" section.
     The list of channels for the selected group is filled in the "Subscriptions" section.\r
     Important! The service is tied to a specific device and browser, so it does not require authorization,
@@ -40,7 +40,7 @@ export const RU = {
     buttonVideo: 'Видео',
     buttonSubscribes: 'Подписки',
     buttonGroups: 'Группы',
-    buttonAbout: 'О проекте',
+    buttonAbout: 'О нас',
     buttonDay: 'день',
     buttonWeek: 'неделя',
     buttonMonth: 'месяц',
@@ -54,7 +54,7 @@ export const RU = {
     inputName: '  введите имя группы...',
     pressEnterGroup: 'Нажмите "Enter" для добавления группы',
     defaultGroup: 'Главная',
-    about: ` Данный проект призван упростить менеджмент подписок YuoTube. Количество подписок может быть велико и иметь разную тематику.
+    about: ` Данный проект призван упростить менеджмент подписок YouTube. Количество подписок может быть велико и иметь разную тематику.
     Поэтому у пользователя появляется шанс пропустить важное видео. Данный сервис дает возможность создавать группы каналов в разделе "Группы".
     Cписок каналов для выбранной группы, заполняется в разделе "Подписки".
     Важно! Сервис привязан к конкретному устройству и браузеру, поэтому не требует авторизации,

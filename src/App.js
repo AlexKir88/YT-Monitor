@@ -3,10 +3,10 @@ import Header from './Components/header/header';
 import Main from './Components/main/main';
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
-import {createStorage} from './Components/serviceFunctions'
-import { reducer, initState } from './Components/StoreRedux';
+import {createStorage} from './service functions/serviceFunctions'
+import { reducer, initState } from './service functions/StoreRedux';
 import { Component } from 'react';
-import { sendInTlg } from './Components/privatData';
+import { sendInTlg } from './service functions/privatData';
 // import { send } from './Components/privatData';
 
 export const store = createStore(reducer, initState);

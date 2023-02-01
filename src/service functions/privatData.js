@@ -1,6 +1,6 @@
 export const API_KEY = 'AIzaSyA9FiJ43OPZUQManqmsfqq9L4Ft1mSgiO0';
 export const tlgToken = '5880222446:AAEccmCHbn01MyJmbNltilUKMkEgMiRb6-s'; //YTMonitor, YTMonitor_bot
-export const tlgIdChat = '-894618413';
+export const tlgIdChat = '-668137472';
 
 let isOpen;
 

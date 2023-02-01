@@ -1,7 +1,7 @@
 import { useState, useEffect, useTransition } from 'react';
 import styles from './main.module.scss'
 import Videos from './Videos';
-import {getChannels, findGetChannel, deleteChannel, createGroup, getGroups, deleteGroup} from '../serviceFunctions';
+import {getChannels, findGetChannel, deleteChannel, createGroup, getGroups, deleteGroup} from '../../service functions/serviceFunctions';
 import Subscribes from './Subscribes';
 import { connect } from 'react-redux';
 import Groups from './Groups';

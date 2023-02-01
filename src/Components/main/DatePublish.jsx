@@ -1,6 +1,6 @@
 import styles from './DatePublish.module.scss';
 import { connect } from 'react-redux';
-import { objTimeIndex } from '../dateFunction';
+import { objTimeIndex } from '../../service functions/dateFunction';
 
 const DatePublish = ({filterPeriod, language, dispatch}) => {
     const setStyle = (indexPeriod) => {
