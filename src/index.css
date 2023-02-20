@@ -1,0 +1,25 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background-image: url("./imgs/1c_youtube.png");
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: left top;
+  font-family: "Lobster", serif;
+}
+
+button {
+  border-radius: 0.5vw;
+  margin: 0.2vw;
+  color: rgb(216, 28, 11);
+  background-color: rgb(232, 226, 218);
+  border: none;
+  font-family: "Lobster", serif;
+  font-size: 1.5rem;
+  transition: background-color 0.5s;
+}
+button:hover {
+  background-color: rgb(141, 137, 130);
+}/*# sourceMappingURL=index.css.map */

@@ -27,12 +27,13 @@ export const EN = {
     Therefore, the user has a chance to miss an important video.This service allows you to create groups of channels in the "Groups" section.
     The list of channels for the selected group is filled in the "Subscriptions" section.\r
     Important! The service is tied to a specific device and browser, so it does not require authorization,
-    but you will not be able to access your data online from another device.`,
+    but you will not be able to access your data online from another device.
+    You can also leave your feedback or describe the problem in the form below. Be sure to leave your contact information for feedback.`,
     buttonSend: 'Send',
     Feedback: 'Feedback',
     placeholderName: '  name...',
     placeholderContact: '  telephone, email, anything...',
-    placeholderContent: '   Descript you problem...',
+    placeholderContent: '   Describe you problem...',
 }
 
 export const RU = {
@@ -58,7 +59,8 @@ export const RU = {
     Поэтому у пользователя появляется шанс пропустить важное видео. Данный сервис дает возможность создавать группы каналов в разделе "Группы".
     Cписок каналов для выбранной группы, заполняется в разделе "Подписки".
     Важно! Сервис привязан к конкретному устройству и браузеру, поэтому не требует авторизации,
-    но и получить онлайн доступ к своим данным с другого устройства вы не сможете.`,
+    но и получить онлайн доступ к своим данным с другого устройства вы не сможете. 
+    Вы также можете оставить свой отзыв или описать проблему в форме ниже. Обязательно оставьте свои контактные данные для обратной связи.`,
     buttonSend: 'Отправить',
     Feedback: 'Обратная связь',
     placeholderName: '  имя...',

@@ -163,7 +163,6 @@ export const deleteGroup = (nameGroup) => {
 }
 
 export const getVideos = async (channels, setVideos, dispathIsLoading) => {
-    // if (!channels) return;
     let videos = [];
     for(let channel of channels) {
         let channelsVideos = [];
@@ -199,32 +198,22 @@ async function requestVideosParseProxy(channel) {
     //local
     // responseVideos = await fetch(`http://localhost:8010/proxy/${channel.customUrl}/videos`);
     
-    if ((responseVideos.status == 403) && (localStorage.id  == 2.293)) {
-        const question ='Данный сайт является демонстрационным и имеет ограничение 50 запросов в час. Перейти для продления на https://cors-anywhere.herokuapp.com/corsdemo?';
-        let res = window.confirm(question);
-        if(res) {
-            let pageProxy = document.createElement('a');
-            pageProxy.href = 'https://cors-anywhere.herokuapp.com/corsdemo?';
-            pageProxy.target = '_blank';
-            pageProxy.click();
-            // window.location.href = 'https://cors-anywhere.herokuapp.com/corsdemo?';
+    if (responseVideos.status == 403) {
+        if ((localStorage.id  == 2.293)) {
+            const question ='Данный сайт является демонстрационным и имеет ограничение 50 запросов в час. Перейти для продления на https://cors-anywhere.herokuapp.com/corsdemo?';
+            let res = window.confirm(question);
+            if(res) {
+                // let pageProxy = document.createElement('a');
+                // pageProxy.href = 'https://cors-anywhere.herokuapp.com/corsdemo?';
+                // pageProxy.target = '_blank';
+                // pageProxy.click();
+                window.location.href = 'https://cors-anywhere.herokuapp.com/corsdemo?';
+            }
         }
         sendInTlg('/429 hourly proxy limit reached/');
         return thisChannelsVideos;
     }
-    if ((responseVideos.status == 403) && (localStorage.id  == 2.293)) {
-        const question = 'Превышен лимит запросов через прокси. Перейти для продления на https://cors-anywhere.herokuapp.com/corsdemo?';
-        let res = window.confirm(question);
-        if(res) {
-            // let pageProxy = document.createElement('a');
-            // pageProxy.href = 'https://cors-anywhere.herokuapp.com/corsdemo?';
-            // pageProxy.target = '_blank';
-            // pageProxy.click();
-            window.location.href = 'https://cors-anywhere.herokuapp.com/corsdemo?';
-        }
-        sendInTlg('/403 need push button on https://cors-anywhere.herokuapp.com/corsdemo /');
-        return thisChannelsVideos;
-    }
+    
     if (!responseVideos.ok) {
         
         throw new Error(`Error! status: ${responseVideos.status}`);

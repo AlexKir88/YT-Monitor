@@ -4,7 +4,7 @@ const getobjTimeIndex = () => {
   const startToDayTimestamp = new Date().setHours(0,0,0,0); 
   const startDay = new Date(startToDayTimestamp);
   const oneMonthTimestump = startToDayTimestamp - new Date(startDay).setMonth(startDay.getMonth() - 1);
-  const treeMonthTimestump = startToDayTimestamp - new Date(startDay).setMonth(startDay.getMonth() - 3);
+  const treeMonthTimestump = startToDayTimestamp - new Date(startDay).setMonth(startDay.getMonth() - 4);
   const oneYearTimestump = startToDayTimestamp - startDay.setFullYear(startDay.getFullYear() - 1);
   let objsTimeIndex = {};
   objsTimeIndex.EN = {
