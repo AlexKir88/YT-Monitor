@@ -33,7 +33,7 @@ export const EN = {
     Feedback: 'Feedback',
     placeholderName: '  name...',
     placeholderContact: '  telephone, email, anything...',
-    placeholderContent: '   Describe you problem...',
+    placeholderContent: '   Describe you problem or offer...',
 }
 
 export const RU = {
@@ -65,5 +65,5 @@ export const RU = {
     Feedback: 'Обратная связь',
     placeholderName: '  имя...',
     placeholderContact: '  телефон, email, что угодно...',
-    placeholderContent: '   Опишите вашу проблему...',
+    placeholderContent: '   Опишите вашу проблему или предложение...',
 }
