@@ -58,8 +58,8 @@
     left: 70%;
     bottom: 15%;
     color: white;
-    width: 3.5rem;
-    height: 1.1rem;
+    width: 3.5vw;
+    height: 3vh;
     background-color: black;
     border-radius: 3px;
     text-align: right;
@@ -75,7 +75,7 @@
     top: 12vh;
 }
 
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 1000px) {
     .video {
         border: 2px solid rgb(78, 24, 24);
         margin: auto 1vw;
